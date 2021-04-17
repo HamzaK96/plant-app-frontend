@@ -6,7 +6,6 @@ const axios = require('axios')
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import Constants from 'expo-constants';
-import * as Location from 'expo-location';
 import { connectActionSheet, ActionSheetOptions, ActionSheetProps } from '@expo/react-native-action-sheet'
 import { SimpleLineIcons, Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
