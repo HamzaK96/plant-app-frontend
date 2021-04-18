@@ -1,4 +1,3 @@
-import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
 import React, { Component } from "react";
 import {
