@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/local/bin/yarnpkg add expo-splash-screen@~0.6.2
+  /usr/bin/node /usr/local/bin/yarn
 
 PATH: 
   /home/raza/.local/bin:/home/raza/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/home/raza/Desktop/Hamza-FYP/Plant-Doctor/node_modules/@babel/core/node_modules/@babel/code-frame/LICENSE'
+  Error: EACCES: permission denied, mkdir '/home/raza/Desktop/Hamza-FYP/Plant-Doctor/node_modules/@babel/core/node_modules/@babel/code-frame'
 
 npm manifest: 
   {
@@ -36,6 +36,7 @@ npm manifest:
       "expo-image-manipulator": "~8.3.0",
       "expo-image-picker": "~9.1.1",
       "expo-permissions": "~9.3.0",
+      "expo-splash-screen": "~0.6.2",
       "native-base": "2.13.8",
       "react": "16.13.1",
       "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
