@@ -38,7 +38,9 @@ const imageWidth = Dimensions.get("window").width;
 const imageHeight = Dimensions.get("window").height;
 const DESIRED_RATIO = "16:9";
 
-const icon = () => <SimpleLineIcons name={name} size={24} color="#469B40" />;
+const icon = (name) => (
+  <SimpleLineIcons name={name} size={24} color="#469B40" />
+);
 
 class CameraComponent extends Component {
   constructor(props) {
@@ -71,7 +73,7 @@ class CameraComponent extends Component {
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
     };
-    icons = [icon("camera"), icon("picture")];
+    let icons = [icon("camera"), icon("picture")];
 
     this.props.showActionSheetWithOptions(
       {

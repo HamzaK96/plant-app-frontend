@@ -19,7 +19,7 @@
     "expo-permissions": "~9.3.0",
     "expo-splash-screen": "~0.6.2",
     "file-system": "^2.2.2",
-    "native-base": "2.13.8",
+    "native-base": "^2.15.2",
     "react": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
     "react-native-gesture-handler": "~1.7.0",
