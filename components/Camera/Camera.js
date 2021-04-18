@@ -38,9 +38,7 @@ const imageWidth = Dimensions.get("window").width;
 const imageHeight = Dimensions.get("window").height;
 const DESIRED_RATIO = "16:9";
 
-const icon = (name: string) => (
-  <SimpleLineIcons name={name} size={24} color="#469B40" />
-);
+const icon = () => <SimpleLineIcons name={name} size={24} color="#469B40" />;
 
 class CameraComponent extends Component {
   constructor(props) {
@@ -122,7 +120,7 @@ class CameraComponent extends Component {
       this.setState({ text: "Running Diagnostics..." });
       // console.log(formData)
       const res = await axios
-        .post("https://soil-sproj.herokuapp.com/analyze", formData, {
+        .post("https://plant-app-backend.herokuapp.com/analyze", formData, {
           headers: {
             "content-type": "multipart/form-data",
           },
