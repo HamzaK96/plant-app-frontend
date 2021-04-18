@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/local/bin/yarn
+  /usr/local/bin/node /usr/local/bin/yarn
 
 PATH: 
   /home/raza/.local/bin:/home/raza/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -8,7 +8,7 @@ Yarn version:
   1.22.10
 
 Node version: 
-  14.16.1
+  12.22.1
 
 Platform: 
   linux x64
@@ -37,6 +37,7 @@ npm manifest:
       "expo-image-picker": "~9.1.1",
       "expo-permissions": "~9.3.0",
       "expo-splash-screen": "~0.6.2",
+      "file-system": "^2.2.2",
       "native-base": "2.13.8",
       "react": "16.13.1",
       "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
