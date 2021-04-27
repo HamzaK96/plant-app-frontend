@@ -3,6 +3,7 @@
     "name": "Plant Doctor",
     "slug": "PlantDoctor",
     "privacy": "public",
+    "sdkVersion": "39.0.0",
     "platforms": [
       "ios",
       "android",

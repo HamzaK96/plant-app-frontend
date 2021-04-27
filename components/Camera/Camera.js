@@ -179,7 +179,7 @@ class CameraComponent extends Component {
       this.setState({ text: "Running Diagnostics..." });
       console.log(formData);
       const res = await axios
-        .post("https://soil-sproj.herokuapp.com/analyze", formData, {
+        .post("https://plant-app-backend.herokuapp.com/analyze", formData, {
           headers: {
             "content-type": "multipart/form-data",
           },

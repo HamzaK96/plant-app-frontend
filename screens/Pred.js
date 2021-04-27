@@ -25,10 +25,10 @@ console.disableYellowBox = true;
 const imageWidth = Dimensions.get("window").width;
 const imageHeight = Dimensions.get("window").height;
 
-const causes = require("../assets/data/Causes.json");
-const treatment = require("../assets/data/Treatment.json");
-const symptoms = require("../assets/data/Symptoms.json");
-const comments = require("../assets/data/Comments.json");
+// const causes = require("../assets/data/Causes.json");
+// const treatment = require("../assets/data/Treatment.json");
+// const symptoms = require("../assets/data/Symptoms.json");
+// const comments = require("../assets/data/Comments.json");
 
 class Pred extends Component {
   constructor(props) {
@@ -36,28 +36,22 @@ class Pred extends Component {
     this.state = {
       image: this.props.navigation.getParam("img"),
       pred: this.props.navigation.getParam("pred"),
-      crop: this.props.navigation
-        .getParam("pred")
-        .split("___")[0]
-        .split("_")
-        .join(" "),
-      diag: this.props.navigation
-        .getParam("pred")
-        .split("___")[1]
-        .split("_")
-        .join(" "),
 
-      // image: "blah",
-      // pred: "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
-      // crop: "Tomato",
-      // diag: "Cedar_apple_rust",
+       crop: this.props.navigation
+         .getParam("pred")['disease'].split(" ")[0],
+       diag: this.props.navigation
+       .getParam("pred")['disease'],
       healthy: false,
 
       data: [
-        { title: "Cause", content: "Lorem ipsum dolor sit amet" },
-        { title: "Symptoms", content: "Lorem ipsum dolor sit amet" },
-        { title: "Treatment", content: "Lorem ipsum dolor sit amet" },
-        { title: "More information", content: "Lorem ipsum dolor sit amet" },
+        { title: "Cause", content: this.props.navigation
+        .getParam("pred")['cause'] },
+        { title: "Symptoms", content: this.props.navigation
+        .getParam("pred")['symptoms'] },
+        { title: "Treatment", content: this.props.navigation
+        .getParam("pred")['management'] },
+        { title: "More information", content: this.props.navigation
+        .getParam("pred")['comments'] },
       ],
 
       images: [],
@@ -79,32 +73,24 @@ class Pred extends Component {
   };
 
   componentDidMount() {
-    console.log("Pred:", this.state.pred);
+    //console.log("Crop: ", this.state.crop)
+    //console.log("Diag: ", this.state.diag.split(" ")[1])
+    console.log("Data: ", this.state.data)
 
-    if (this.state.diag === "healthy") {
+    if (this.state.diag.split(" ")[1] === "healthy") {
       this.setState({
         healthy: true,
         diag: "Healthy",
       });
-    } else {
-      for (var i = this.state.data.length - 1; i >= 0; i--) {
-        if (this.state.data[i]["title"] === "Cause") {
-          this.state.data[i]["content"] = causes[this.state.pred];
-        } else if (this.state.data[i]["title"] === "Symptoms") {
-          this.state.data[i]["content"] = symptoms[this.state.pred];
-        } else if (this.state.data[i]["title"] === "Treatment") {
-          this.state.data[i]["content"] = treatment[this.state.pred];
-        } else if (this.state.data[i]["title"] === "More information") {
-          this.state.data[i]["content"] = comments[this.state.pred];
-        }
-      }
     }
     this.getPath(this.state.pred);
   }
 
   getPath(diag) {
     // if (diag === "Apple___Apple_Scab") {
-    if (diag) {
+        //console.log("Diag: ", diag)
+    if (diag['disease'] == "Apple Apple Scab") {
+        //console.log("Hello getpath")
       let img1 = require("../assets/cropimg/Apple___Apple_Scab/1.jpg");
       let img2 = require("../assets/cropimg/Apple___Apple_Scab/2.jpg");
       let img3 = require("../assets/cropimg/Apple___Apple_Scab/3.jpg");
@@ -112,303 +98,62 @@ class Pred extends Component {
         images: [...this.state.images, img1, img2, img3],
       });
     }
-    // if (diag === "Apple___Black_rot") {
-    //   img1 = require("../assets/cropimg/Apple___Black_rot/1.jpg");
-    //   img2 = require("../assets/cropimg/Apple___Black_rot/2.jpg");
-    //   img3 = require("../assets/cropimg/Apple___Black_rot/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Apple___Cedar_apple_rust") {
-    //   img1 = require("../assets/cropimg/Apple___Cedar_apple_rust/1.jpg");
-    //   img2 = require("../assets/cropimg/Apple___Cedar_apple_rust/2.jpg");
-    //   img3 = require("../assets/cropimg/Apple___Cedar_apple_rust/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Cherry_(including_sour)___Powdery_mildew") {
-    //   img1 = require("../assets/cropimg/Cherry_(including_sour)___Powdery_mildew/1.jpg");
-    //   img2 = require("../assets/cropimg/Cherry_(including_sour)___Powdery_mildew/2.jpg");
-    //   img3 = require("../assets/cropimg/Cherry_(including_sour)___Powdery_mildew/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Corn_(maize)___Cercospora_Gray_leaf_spot") {
-    //   img1 = require("../assets/cropimg/Corn_(maize)___Cercospora_Gray_leaf_spot/1.jpg");
-    //   img2 = require("../assets/cropimg/Corn_(maize)___Cercospora_Gray_leaf_spot/2.jpg");
-    //   img3 = require("../assets/cropimg/Corn_(maize)___Cercospora_Gray_leaf_spot/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Corn_(maize)___Common_rust_") {
-    //   img1 = require("../assets/cropimg/Corn_(maize)___Common_rust_/1.jpg");
-    //   img2 = require("../assets/cropimg/Corn_(maize)___Common_rust_/2.jpg");
-    //   img3 = require("../assets/cropimg/Corn_(maize)___Common_rust_/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Corn_(maize)___Northern_Leaf_Blight") {
-    //   img1 = require("../assets/cropimg/Corn_(maize)___Northern_Leaf_Blight/1.jpg");
-    //   img2 = require("../assets/cropimg/Corn_(maize)___Northern_Leaf_Blight/2.jpg");
-    //   img3 = require("../assets/cropimg/Corn_(maize)___Northern_Leaf_Blight/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Grape___Esca_(Black_Measles)") {
-    //   img1 = require("../assets/cropimg/Grape___Esca_(Black_Measles)/1.jpg");
-    //   img2 = require("../assets/cropimg/Grape___Esca_(Black_Measles)/2.jpg");
-    //   img3 = require("../assets/cropimg/Grape___Esca_(Black_Measles)/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)") {
-    //   img1 = require("../assets/cropimg/Grape___Leaf_blight_(Isariopsis_Leaf_Spot)/1.jpg");
-    //   img2 = require("../assets/cropimg/Grape___Leaf_blight_(Isariopsis_Leaf_Spot)/2.jpg");
-    //   img3 = require("../assets/cropimg/Grape___Leaf_blight_(Isariopsis_Leaf_Spot)/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Grape___Black_rot") {
-    //   img1 = require("../assets/cropimg/Grape___Black_rot/1.jpg");
-    //   img2 = require("../assets/cropimg/Grape___Black_rot/2.jpg");
-    //   img3 = require("../assets/cropimg/Grape___Black_rot/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Orange___Haunglongbing_(Citrus_greening)") {
-    //   img1 = require("../assets/cropimg/Orange___Haunglongbing_(Citrus_greening)/1.jpg");
-    //   img2 = require("../assets/cropimg/Orange___Haunglongbing_(Citrus_greening)/2.jpg");
-    //   img3 = require("../assets/cropimg/Orange___Haunglongbing_(Citrus_greening)/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Peach___Bacterial_spot") {
-    //   img1 = require("../assets/cropimg/Peach___Bacterial_spot/1.jpg");
-    //   img2 = require("../assets/cropimg/Peach___Bacterial_spot/2.jpg");
-    //   img3 = require("../assets/cropimg/Peach___Bacterial_spot/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Pepper_bell___Bacterial_spot") {
-    //   img1 = require("../assets/cropimg/Pepper_bell___Bacterial_spot/1.jpg");
-    //   img2 = require("../assets/cropimg/Pepper_bell___Bacterial_spot/2.jpg");
-    //   img3 = require("../assets/cropimg/Pepper_bell___Bacterial_spot/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Potato___Early_blight") {
-    //   img1 = require("../assets/cropimg/Potato___Early_blight/1.jpg");
-    //   img2 = require("../assets/cropimg/Potato___Early_blight/2.jpg");
-    //   img3 = require("../assets/cropimg/Potato___Early_blight/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Potato___Late_blight") {
-    //   img1 = require("../assets/cropimg/Potato___Late_blight/1.jpg");
-    //   img2 = require("../assets/cropimg/Potato___Late_blight/2.jpg");
-    //   img3 = require("../assets/cropimg/Potato___Late_blight/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Squash___Powdery_mildew") {
-    //   img1 = require("../assets/cropimg/Squash___Powdery_mildew/1.jpg");
-    //   img2 = require("../assets/cropimg/Squash___Powdery_mildew/2.jpg");
-    //   img3 = require("../assets/cropimg/Squash___Powdery_mildew/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Strawberry___Leaf_scorch") {
-    //   img1 = require("../assets/cropimg/Strawberry___Leaf_scorch/1.jpg");
-    //   img2 = require("../assets/cropimg/Strawberry___Leaf_scorch/2.jpg");
-    //   img3 = require("../assets/cropimg/Strawberry___Leaf_scorch/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Tomato___Early_blight") {
-    //   img1 = require("../assets/cropimg/Tomato___Early_blight/1.jpg");
-    //   img2 = require("../assets/cropimg/Tomato___Early_blight/2.jpg");
-    //   img3 = require("../assets/cropimg/Tomato___Early_blight/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Tomato___Leaf_Mold") {
-    //   img1 = require("../assets/cropimg/Tomato___Leaf_Mold/1.jpg");
-    //   img2 = require("../assets/cropimg/Tomato___Leaf_Mold/2.jpg");
-    //   img3 = require("../assets/cropimg/Tomato___Leaf_Mold/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Tomato___Septoria_leaf_spot") {
-    //   img1 = require("../assets/cropimg/Tomato___Septoria_leaf_spot/1.jpg");
-    //   img2 = require("../assets/cropimg/Tomato___Septoria_leaf_spot/2.jpg");
-    //   img3 = require("../assets/cropimg/Tomato___Septoria_leaf_spot/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Tomato___Target_Spot") {
-    //   img1 = require("../assets/cropimg/Tomato___Target_Spot/1.jpg");
-    //   img2 = require("../assets/cropimg/Tomato___Target_Spot/2.jpg");
-    //   img3 = require("../assets/cropimg/Tomato___Target_Spot/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Tomato___Bacterial_spot") {
-    //   img1 = require("../assets/cropimg/Tomato___Bacterial_spot/1.jpg");
-    //   img2 = require("../assets/cropimg/Tomato___Bacterial_spot/2.jpg");
-    //   img3 = require("../assets/cropimg/Tomato___Bacterial_spot/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Tomato___Late_blight") {
-    //   img1 = require("../assets/cropimg/Tomato___Late_blight/1.jpg");
-    //   img2 = require("../assets/cropimg/Tomato___Late_blight/2.jpg");
-    //   img3 = require("../assets/cropimg/Tomato___Late_blight/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Tomato___Tomato_mosaic_virus") {
-    //   img1 = require("../assets/cropimg/Tomato___Tomato_mosaic_virus/1.jpg");
-    //   img2 = require("../assets/cropimg/Tomato___Tomato_mosaic_virus/2.jpg");
-    //   img3 = require("../assets/cropimg/Tomato___Tomato_mosaic_virus/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Tomato___Tomato_Yellow_Leaf_Curl_Virus") {
-    //   img1 = require("../assets/cropimg/Tomato___Tomato_Yellow_Leaf_Curl_Virus/1.jpg");
-    //   img2 = require("../assets/cropimg/Tomato___Tomato_Yellow_Leaf_Curl_Virus/2.jpg");
-    //   img3 = require("../assets/cropimg/Tomato___Tomato_Yellow_Leaf_Curl_Virus/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Tomato___Two-spotted_spider_mite") {
-    //   img1 = require("../assets/cropimg/Tomato___Two-spotted_spider_mite/1.jpg");
-    //   img2 = require("../assets/cropimg/Tomato___Two-spotted_spider_mite/2.jpg");
-    //   img3 = require("../assets/cropimg/Tomato___Two-spotted_spider_mite/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-
-    // if (diag === "Strawberry___healthy") {
-    //   img1 = require("../assets/cropimg/Strawberry___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Strawberry___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Strawberry___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Blueberry___healthy") {
-    //   img1 = require("../assets/cropimg/Blueberry___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Blueberry___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Blueberry___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Peach___healthy") {
-    //   img1 = require("../assets/cropimg/Peach___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Peach___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Peach___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Potato___healthy") {
-    //   img1 = require("../assets/cropimg/Potato___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Potato___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Potato___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Corn_(maize)___healthy") {
-    //   img1 = require("../assets/cropimg/Corn_(maize)___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Corn_(maize)___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Corn_(maize)___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Apple___healthy") {
-    //   img1 = require("../assets/cropimg/Apple___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Apple___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Apple___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Pepper_bell___healthy") {
-    //   img1 = require("../assets/cropimg/Pepper_bell___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Pepper_bell___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Pepper_bell___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Raspberry___healthy") {
-    //   img1 = require("../assets/cropimg/Raspberry___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Raspberry___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Raspberry___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Soybean___healthy") {
-    //   img1 = require("../assets/cropimg/Soybean___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Soybean___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Soybean___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Grape___healthy") {
-    //   img1 = require("../assets/cropimg/Grape___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Grape___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Grape___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Tomato___healthy") {
-    //   img1 = require("../assets/cropimg/Tomato___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Tomato___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Tomato___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
-    // if (diag === "Cherry_(including_sour)___healthy") {
-    //   img1 = require("../assets/cropimg/Cherry_(including_sour)___healthy/1.jpg");
-    //   img2 = require("../assets/cropimg/Cherry_(including_sour)___healthy/2.jpg");
-    //   img3 = require("../assets/cropimg/Cherry_(including_sour)___healthy/3.jpg");
-    //   this.setState({
-    //     images: [...this.state.images, img1, img2, img3],
-    //   });
-    // }
+    if (diag['disease'] === "Apple Black rot") {
+      img1 = require("../assets/cropimg/Apple___Black_rot/1.jpg");
+      img2 = require("../assets/cropimg/Apple___Black_rot/2.jpg");
+      img3 = require("../assets/cropimg/Apple___Black_rot/3.jpg");
+      this.setState({
+        images: [...this.state.images, img1, img2, img3],
+      });
+    }
+    if (diag['disease'] === "Apple Cedar apple rust") {
+      img1 = require("../assets/cropimg/Apple___Cedar_apple_rust/1.jpg");
+      img2 = require("../assets/cropimg/Apple___Cedar_apple_rust/2.jpg");
+      img3 = require("../assets/cropimg/Apple___Cedar_apple_rust/3.jpg");
+      this.setState({
+        images: [...this.state.images, img1, img2, img3],
+      });
+    }
+    if (diag['disease'] === "Corn (maize) Cercospora leaf spot Gray leaf spot") {
+      img1 = require("../assets/cropimg/Corn_(maize)___Cercospora_Gray_leaf_spot/1.jpg");
+      img2 = require("../assets/cropimg/Corn_(maize)___Cercospora_Gray_leaf_spot/2.jpg");
+      img3 = require("../assets/cropimg/Corn_(maize)___Cercospora_Gray_leaf_spot/3.jpg");
+      this.setState({
+        images: [...this.state.images, img1, img2, img3],
+      });
+    }
+    if (diag['disease'] === "Corn (maize) Common rust") {
+      img1 = require("../assets/cropimg/Corn_(maize)___Common_rust_/1.jpg");
+      img2 = require("../assets/cropimg/Corn_(maize)___Common_rust_/2.jpg");
+      img3 = require("../assets/cropimg/Corn_(maize)___Common_rust_/3.jpg");
+      this.setState({
+        images: [...this.state.images, img1, img2, img3],
+      });
+    }
+    if (diag['disease'] === "Corn (maize) Northern Leaf Blight") {
+      img1 = require("../assets/cropimg/Corn_(maize)___Northern_Leaf_Blight/1.jpg");
+      img2 = require("../assets/cropimg/Corn_(maize)___Northern_Leaf_Blight/2.jpg");
+      img3 = require("../assets/cropimg/Corn_(maize)___Northern_Leaf_Blight/3.jpg");
+      this.setState({
+        images: [...this.state.images, img1, img2, img3],
+      });
+    }
+    if (diag['disease'] === "Potato Early blight") {
+      img1 = require("../assets/cropimg/Potato___Early_blight/1.jpg");
+      img2 = require("../assets/cropimg/Potato___Early_blight/2.jpg");
+      img3 = require("../assets/cropimg/Potato___Early_blight/3.jpg");
+      this.setState({
+        images: [...this.state.images, img1, img2, img3],
+      });
+    }
+    if (diag['disease'] === "Potato Late blight") {
+      img1 = require("../assets/cropimg/Potato___Late_blight/1.jpg");
+      img2 = require("../assets/cropimg/Potato___Late_blight/2.jpg");
+      img3 = require("../assets/cropimg/Potato___Late_blight/3.jpg");
+      this.setState({
+        images: [...this.state.images, img1, img2, img3],
+      });
+    }
   }
 
   //   _renderHeader = (item, expanded) => {
@@ -556,8 +301,8 @@ class Pred extends Component {
   );
 
   render() {
-    console.log("Health? ", this.state.healthy);
-    console.log("Data", this.state.data);
+    // console.log("Health? ", this.state.healthy);
+    // console.log("Data", this.state.data);
     return (
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor="#469B40" />
