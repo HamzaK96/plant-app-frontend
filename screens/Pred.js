@@ -74,8 +74,9 @@ class Pred extends Component {
 
   componentDidMount() {
     //console.log("Crop: ", this.state.crop)
-    //console.log("Diag: ", this.state.diag.split(" ")[1])
-    console.log("Data: ", this.state.data)
+    //console.log("Diag: ", this.state.diag)
+    //console.log("Data: ", this.state.data)
+    //console.log("Data: ", this.state.pred)
 
     if (this.state.diag.split(" ")[1] === "healthy") {
       this.setState({
@@ -88,8 +89,8 @@ class Pred extends Component {
 
   getPath(diag) {
     // if (diag === "Apple___Apple_Scab") {
-        //console.log("Diag: ", diag)
-    if (diag['disease'] == "Apple Apple Scab") {
+    console.log("Diag disease: ", diag['disease'])
+    if (diag['disease'] == "Apple Apple scab") {
         //console.log("Hello getpath")
       let img1 = require("../assets/cropimg/Apple___Apple_Scab/1.jpg");
       let img2 = require("../assets/cropimg/Apple___Apple_Scab/2.jpg");
