@@ -3,8 +3,12 @@ import * as SplashScreen from "expo-splash-screen";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 
 import { Provider } from 'react-native-paper'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+// import { NavigationContainer } from '@react-navigation/native'
+// import { createStackNavigator } from '@react-navigation/stack'
+
+import { NavigationContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { theme } from './src/core/theme'
