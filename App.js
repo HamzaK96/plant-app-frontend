@@ -1,18 +1,62 @@
 import React, { Component } from "react";
-import Navigator from "./config/routes";
 import * as SplashScreen from "expo-splash-screen";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
-class HelloWorldApp extends Component {
-  componentDidMount() {
-    SplashScreen.hideAsync();
-  }
-  render() {
-    return (
-      <ActionSheetProvider>
-        <Navigator />
-      </ActionSheetProvider>
-    );
-  }
-}
 
-export default HelloWorldApp;
+import { Provider } from 'react-native-paper'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import { theme } from './src/core/theme'
+import {
+    LoginScreen,
+    Pred,
+    Cam,
+  } from './src/screens'
+
+import { FIREBASE_CONFIG } from './src/core/config'
+
+const Stack = createStackNavigator()
+if (!firebase.apps.length) {
+    firebase.initializeApp(FIREBASE_CONFIG)
+}
+  
+export default function App() {
+    return (
+      <Provider theme={theme}>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="LoginScreen"
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen
+              name="LoginScreen"
+              component={LoginScreen}
+            />
+            <Stack.Screen
+              name="cam"
+              component={Cam}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+    )
+}
+  
+
+// class HelloWorldApp extends Component {
+//   componentDidMount() {
+//     SplashScreen.hideAsync();
+//   }
+//   render() {
+//     return (
+//       <ActionSheetProvider>
+//         <Navigator />
+//       </ActionSheetProvider>
+//     );
+//   }
+// }
+
+// export default HelloWorldApp;

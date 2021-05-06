@@ -28,6 +28,9 @@
     },
     "android": {
       "package": "com.Sproj.PlantDoctor"
+    },
+    "packagerOpts": {
+        "sourceExts": ["js", "json", "ts", "tsx", "jsx"]
     }
   }
 }
