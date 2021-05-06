@@ -24,6 +24,7 @@ if (!firebase.apps.length) {
 export default function App() {
     return (
       <Provider theme={theme}>
+          <ActionSheetProvider>
         <NavigationContainer>
           <Stack.Navigator
             initialRouteName="LoginScreen"
@@ -39,8 +40,13 @@ export default function App() {
               name="cam"
               component={Cam}
             />
+            <Stack.Screen
+              name="pred"
+              component={Pred}
+            />
           </Stack.Navigator>
         </NavigationContainer>
+        </ActionSheetProvider>
       </Provider>
     )
 }

@@ -34,8 +34,8 @@ class Pred extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: this.props.navigation.getParam("img"),
-      pred: this.props.navigation.getParam("pred"),
+       image: this.props.navigation.getParam("img"),
+       pred: this.props.navigation.getParam("pred"),
 
        crop: this.props.navigation
          .getParam("pred")['disease'].split(" ")[0],

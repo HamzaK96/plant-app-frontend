@@ -87,6 +87,7 @@ class CameraComponent extends Component {
         icons,
       },
       (buttonIndex) => {
+        console.log("button index")
         this._pickImage(buttonIndex);
       }
       
