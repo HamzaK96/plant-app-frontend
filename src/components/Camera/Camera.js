@@ -63,6 +63,7 @@ class CameraComponent extends Component {
 
   _OpenActionSheet = () => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
+
     const options = ["Open Camera", "Open Gallery"];
     const cancelButtonIndex = 2;
     const textStyle = {
@@ -75,6 +76,8 @@ class CameraComponent extends Component {
     };
     let icons = [icon("camera"), icon("picture")];
 
+    //console.log("Yes this part works")
+
     this.props.showActionSheetWithOptions(
       {
         options,
@@ -86,10 +89,16 @@ class CameraComponent extends Component {
       (buttonIndex) => {
         this._pickImage(buttonIndex);
       }
+      
     );
+
+    // console.log("Yes this part works")
   };
 
   _pickImage = async (index) => {
+
+    console.log("pickimage part works")
+
     if (index === 0) {
       let result = await ImagePicker.launchCameraAsync({
         quality: 1,
