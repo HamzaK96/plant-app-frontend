@@ -17,12 +17,12 @@ import {
     Cam,
   } from './src/screens'
 
-import { FIREBASE_CONFIG } from './src/core/config'
+// import { FIREBASE_CONFIG } from './src/core/config'
 
 const Stack = createStackNavigator()
-if (!firebase.apps.length) {
-    firebase.initializeApp(FIREBASE_CONFIG)
-}
+// if (!firebase.apps.length) {
+//     firebase.initializeApp(FIREBASE_CONFIG)
+// }
   
 export default function App() {
     return (

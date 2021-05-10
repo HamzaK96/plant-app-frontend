@@ -24,37 +24,23 @@ import { SliderBox } from "react-native-image-slider-box";
 console.disableYellowBox = true;
 const imageWidth = Dimensions.get("window").width;
 const imageHeight = Dimensions.get("window").height;
-
-// const causes = require("../assets/data/Causes.json");
-// const treatment = require("../assets/data/Treatment.json");
-// const symptoms = require("../assets/data/Symptoms.json");
-// const comments = require("../assets/data/Comments.json");
-
 class Pred extends Component {
   constructor(props) {
     super(props);
     this.state = {
-       image: this.props.navigation.getParam("img"),
-       pred: this.props.navigation.getParam("pred"),
+        image: props.route.params.img,
+        pred: props.route.params.pred,
+        crop: props.route.params.pred['disease'].split(" ")[0],
+        diag: props.route.params.pred['disease'],
+        healthy: false,
 
-       crop: this.props.navigation
-         .getParam("pred")['disease'].split(" ")[0],
-       diag: this.props.navigation
-       .getParam("pred")['disease'],
-      healthy: false,
-
-      data: [
-        { title: "Cause", content: this.props.navigation
-        .getParam("pred")['cause'] },
-        { title: "Symptoms", content: this.props.navigation
-        .getParam("pred")['symptoms'] },
-        { title: "Treatment", content: this.props.navigation
-        .getParam("pred")['management'] },
-        { title: "More information", content: this.props.navigation
-        .getParam("pred")['comments'] },
-      ],
-
-      images: [],
+        data: [
+            {title: "Cause", content: props.route.params.pred['cause']},
+            {title: "Symptoms", content: props.route.params.pred['symptoms']},
+            {title: "Treatment", content: props.route.params.pred['management']},
+            {title: "More Information", content: props.route.params.pred['comments']},
+        ],
+      images: []
     };
   }
 
@@ -73,10 +59,10 @@ class Pred extends Component {
   };
 
   componentDidMount() {
-    //console.log("Crop: ", this.state.crop)
-    //console.log("Diag: ", this.state.diag)
-    //console.log("Data: ", this.state.data)
-    //console.log("Data: ", this.state.pred)
+    // console.log("Crop: ", this.state.crop)
+    // console.log("Diag: ", this.state.diag)
+    // console.log("Data: ", this.state.data)
+    // console.log("Data: ", this.state.pred)
 
     if (this.state.diag.split(" ")[1] === "healthy") {
       this.setState({
@@ -89,7 +75,7 @@ class Pred extends Component {
 
   getPath(diag) {
     // if (diag === "Apple___Apple_Scab") {
-    console.log("Diag disease: ", diag['disease'])
+    //console.log("Diag disease: ", diag['disease'])
     if (diag['disease'] == "Apple Apple scab") {
         //console.log("Hello getpath")
       let img1 = require("../assets/cropimg/Apple___Apple_Scab/1.jpg");

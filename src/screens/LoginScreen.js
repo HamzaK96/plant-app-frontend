@@ -20,22 +20,22 @@ export default function LoginScreen({ navigation }) {
   const [error, setError] = useState()
 
   const onLoginPressed = async () => {
-    // const emailError = emailValidator(email.value)
-    // const passwordError = passwordValidator(password.value)
-    // if (emailError || passwordError) {
-    //   setEmail({ ...email, error: emailError })
-    //   setPassword({ ...password, error: passwordError })
-    //   return
-    // }
-    // setLoading(true)
-    // const response = await loginUser({
-    //   email: email.value,
-    //   password: password.value,
-    // })
-    // if (response.error) {
-    //   setError(response.error)
-    // }
-    // setLoading(false)
+    const emailError = emailValidator(email.value)
+    const passwordError = passwordValidator(password.value)
+    if (emailError || passwordError) {
+      setEmail({ ...email, error: emailError })
+      setPassword({ ...password, error: passwordError })
+      return
+    }
+    setLoading(true)
+    const response = await loginUser({
+      email: email.value,
+      password: password.value,
+    })
+    if (response.error) {
+      setError(response.error)
+    }
+    setLoading(false)
     navigation.navigate("cam")
   }
 
