@@ -1,3 +1,6 @@
 export { default as LoginScreen } from './LoginScreen'
 export { default as Pred } from './Pred'
 export { default as Cam } from './Cam'
+export { default as RegisterScreen } from './RegisterScreen'
+export { default as ResetPasswordScreen } from './ResetPasswordScreen'
+export { default as AuthLoadingScreen } from './AuthLoadingScreen'

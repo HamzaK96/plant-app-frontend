@@ -1,71 +1,58 @@
 import React, { Component } from "react";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 
-import { Provider } from 'react-native-paper'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { Provider } from "react-native-paper";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 // import { NavigationContainer } from 'react-navigation'
 // import { createStackNavigator } from 'react-navigation-stack'
 
-import firebase from 'firebase/app'
-import 'firebase/auth'
-import { theme } from './src/core/theme'
+import firebase from "firebase/app";
+import "firebase/auth";
+import { theme } from "./src/core/theme";
 import {
-    LoginScreen,
-    Pred,
-    Cam,
-  } from './src/screens'
+  LoginScreen,
+  Pred,
+  Cam,
+  RegisterScreen,
+  ResetPasswordScreen,
+  AuthLoadingScreen
+} from "./src/screens";
 
-// import { FIREBASE_CONFIG } from './src/core/config'
+import { FIREBASE_CONFIG } from './src/core/config'
 
-const Stack = createStackNavigator()
-// if (!firebase.apps.length) {
-//     firebase.initializeApp(FIREBASE_CONFIG)
-// }
-  
+const Stack = createStackNavigator();
+if (!firebase.apps.length) {
+    firebase.initializeApp(FIREBASE_CONFIG)
+}
+
 export default function App() {
-    return (
-      <Provider theme={theme}>
-          <ActionSheetProvider>
+  return (
+    <Provider theme={theme}>
+      <ActionSheetProvider>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="LoginScreen"
+            initialRouteName="AuthLoadingScreen"
             screenOptions={{
               headerShown: false,
             }}
           >
             <Stack.Screen
-              name="LoginScreen"
-              component={LoginScreen}
+              name="AuthLoadingScreen"
+              component={AuthLoadingScreen}
             />
+            <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="cam" component={Cam} />
+            <Stack.Screen name="pred" component={Pred} />
+            <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
             <Stack.Screen
-              name="cam"
-              component={Cam}
-            />
-            <Stack.Screen
-              name="pred"
-              component={Pred}
+              name="ResetPasswordScreen"
+              component={ResetPasswordScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>
-        </ActionSheetProvider>
-      </Provider>
-    )
+      </ActionSheetProvider>
+    </Provider>
+  );
 }
-  
-
-// class HelloWorldApp extends Component {
-//   componentDidMount() {
-//     SplashScreen.hideAsync();
-//   }
-//   render() {
-//     return (
-//       <ActionSheetProvider>
-//         <Navigator />
-//       </ActionSheetProvider>
-//     );
-//   }
-// }
-
-// export default HelloWorldApp;
