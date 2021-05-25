@@ -25,9 +25,12 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     marginVertical: 12,
+    justifyContent: 'center',
   },
   input: {
-    backgroundColor: theme.colors.surface,
+    width: 300,
+    backgroundColor: theme.colors.bgscreen,
+    borderColor: theme.colors.border,
   },
   description: {
     fontSize: 13,

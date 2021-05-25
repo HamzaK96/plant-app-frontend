@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Button as PaperButton } from 'react-native-paper'
 import { theme } from '../core/theme'
 
@@ -8,13 +8,14 @@ export default function Button({ mode, style, ...props }) {
     <PaperButton
       style={[
         styles.button,
-        mode === 'outlined' && { backgroundColor: theme.colors.surface },
+        mode === 'outlined', //&& { backgroundColor: theme.colors.bgscreen },
         style,
       ]}
       labelStyle={styles.text}
       mode={mode}
       {...props}
     />
+
   )
 }
 
@@ -23,6 +24,8 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 10,
     paddingVertical: 2,
+    borderRadius: 45,
+    backgroundColor: '#2FF712',
   },
   text: {
     fontWeight: 'bold',

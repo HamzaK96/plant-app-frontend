@@ -35,15 +35,17 @@ export default function LoginScreen({ navigation }) {
     if (response.error) {
       setError(response.error)
     }
+    else {
+      navigation.navigate("cam")
+    }
     setLoading(false)
-    navigation.navigate("cam")
   }
 
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
       <Logo />
-      <Header>Welcome back.</Header>
+      <Header>Gardenia</Header>
       <TextInput
         label="Email"
         returnKeyType="next"
