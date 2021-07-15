@@ -241,7 +241,7 @@ class CameraComponent extends Component {
               paddingRight: imageWidth / 30,
             }}
           >
-            <Text
+            {/* <Text
               style={{
                 fontWeight: "800",
                 alignItems: "center",
@@ -250,8 +250,8 @@ class CameraComponent extends Component {
                 color: "#469B40",
               }}
             >
-              Plant Doctor
-            </Text>
+              
+            </Text> */}
             <Text
               style={{
                 fontWeight: "600",

@@ -36,7 +36,7 @@ export default function LoginScreen({ navigation }) {
       setError(response.error)
     }
     else {
-      navigation.navigate("cam")
+      navigation.navigate("Home")
     }
     setLoading(false)
   }
