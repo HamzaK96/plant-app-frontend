@@ -8,6 +8,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 // import { NavigationContainer } from 'react-navigation'
 // import { createStackNavigator } from 'react-navigation-stack'
@@ -22,6 +23,8 @@ import {
   RegisterScreen,
   ResetPasswordScreen,
   AuthLoadingScreen,
+  ProfileScreen,
+  EditProfileScreen,
 } from "./src/screens";
 
 import { FIREBASE_CONFIG } from "./src/core/config";
@@ -35,7 +38,10 @@ if (!firebase.apps.length) {
 }
 
 const HomeStack = createStackNavigator();
-const DetailsStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
+const FeedStack = createStackNavigator();
+const FavouritesStack = createStackNavigator();
+
 const Drawer = createDrawerNavigator();
 
 const HomeStackScreen = ({ navigation }) => (
@@ -70,8 +76,8 @@ const HomeStackScreen = ({ navigation }) => (
   </HomeStack.Navigator>
 );
 
-const DetailsStackScreen = ({ navigation }) => (
-  <DetailsStack.Navigator
+const ProfileStackScreen = ({ navigation }) => (
+  <ProfileStack.Navigator
     screenOptions={{
       headerStyle: {
         backgroundColor: "#242424",
@@ -82,11 +88,11 @@ const DetailsStackScreen = ({ navigation }) => (
       },
     }}
   >
-    <DetailsStack.Screen
-      name="cam"
-      component={Cam}
+    <ProfileStack.Screen
+      name="ProfileScreen"
+      component={ProfileScreen}
       options={{
-        title: "Home",
+        title: "Profile",
         headerLeft: () => (
           <Ionicons
             name="ios-menu"
@@ -97,16 +103,34 @@ const DetailsStackScreen = ({ navigation }) => (
             }}
           ></Ionicons>
         ),
+        headerRight: () => (
+          <MaterialCommunityIcons
+            name="account-edit"
+            size={25}
+            color="white"
+            onPress={() => navigation.navigate("EditProfile")}
+          ></MaterialCommunityIcons>
+        ),
       }}
     />
-  </DetailsStack.Navigator>
+
+    <ProfileStack.Screen
+      name="EditProfile"
+      component={EditProfileScreen}
+      options={{
+        title: "Edit Profile",
+      }}
+    />
+  </ProfileStack.Navigator>
 );
 
 function DrawerRoutes() {
   return (
-    <Drawer.Navigator drawerContent = {props => <DrawerContent {...props} />}>
+    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="HomeDrawer" component={HomeStackScreen} />
-      <Drawer.Screen name="DetailsDrawer" component={DetailsStackScreen} />
+      <Drawer.Screen name="ProfileDrawer" component={ProfileStackScreen} />
+      {/* <Drawer.Screen name="FeedDrawer" component={FeedStackScreen} />
+      <Drawer.Screen name="FavouritesDrawer" component={FavouritesStackScreen} /> */}
     </Drawer.Navigator>
   );
 }

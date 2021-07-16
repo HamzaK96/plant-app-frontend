@@ -30,7 +30,7 @@ export function DrawerContent(props) {
           <View style={styles.userInfoSection}>
             <View style={{ flexDirection: "row", marginTop: 15 }}>
               <Avatar.Image
-                source={require("../assets/images/my-face.jpg")}
+                source={require("../assets/images/default-user.png")}
                 size={50}
               />
               <View style={{ marginLeft: 15, flexDirection: "column" }}>
@@ -49,14 +49,14 @@ export function DrawerContent(props) {
               <MaterialIcons name="home" color={color} size={size} />
             )}
             label="Home"
-            onPress={() => {}}
+            onPress={() => {props.navigation.navigate('HomeDrawer')}}
           />
           <DrawerItem
             icon={({ color, size }) => (
               <MaterialIcons name="account-circle" color={color} size={size} />
             )}
             label="Profile"
-            onPress={() => {}}
+            onPress={() => {props.navigation.navigate('ProfileDrawer')}}
           />
           <DrawerItem
             icon={({ color, size }) => (
