@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   Button,
   TouchableOpacity,
+  Image,
   ImageBackground,
   TextInput,
   StyleSheet,
@@ -14,12 +15,122 @@ import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { theme } from "../core/theme";
 
+import BottomSheet from "reanimated-bottom-sheet";
+import Animated from "react-native-reanimated";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
+import exampleImage from "../assets/images/default-user.png";
+
 export default function EditProfileScreen() {
+  const exampleImageUri = Image.resolveAssetSource(exampleImage).uri;
+  // The path of the picked image
+  const [pickedImagePath, setPickedImagePath] = useState(
+    exampleImageUri
+  );
+
+  // This function is triggered when the "Select an image" button pressed
+  showImagePicker = async () => {
+    const status = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    //console.log("Camera Permission Granted")
+    // console.log("Status:", status)
+
+    // if (status !== "granted") {
+    //     alert("You've refused to allow this appp to access your gallery!");
+    //     return;
+    // }
+
+    // console.log("Status:", status)
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      quality: 1,
+      allowsEditing: true,
+      aspect: [1, 1],
+    });
+
+    if (!result.cancelled) {
+      setPickedImagePath(result.uri);
+      console.log(result.uri);
+    }
+  };
+
+  // This function is triggered when the "Open camera" button pressed
+  openCamera = async () => {
+    console.log("Camera Accessed");
+
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+    console.log("Permission:", permissionResult);
+
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this appp to access your camera!");
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      quality: 1,
+      allowsEditing: true,
+      aspect: [1, 1],
+    });
+
+    if (!result.cancelled) {
+      setPickedImagePath(result.uri);
+      console.log(result.uri);
+    }
+  };
+
+  renderInner = () => (
+    <View style={styles.panel}>
+      <View style={{ alignItems: "center" }}>
+        <Text style={styles.panelTitle}>Upload Photo</Text>
+        <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+      </View>
+
+      <TouchableOpacity style={styles.panelButton} onPress={openCamera}>
+        <Text style={styles.panelButtonTitle}>Take Photo</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.panelButton} onPress={showImagePicker}>
+        <Text style={styles.panelButtonTitle}>Choose From Library</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.panelButton}
+        onPress={() => this.bs.current.snapTo(1)}
+      >
+        <Text style={styles.panelButtonTitle}>Cancel</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  renderHeader = () => (
+    <View style={styles.header}>
+      <View style={styles.panelHeader}>
+        <View style={styles.panelHandle}></View>
+      </View>
+    </View>
+  );
+
+  bs = React.createRef();
+  fall = new Animated.Value(1);
+
   return (
     <View style={styles.container}>
-      <View style={{ margin: 20 }}>
+      <BottomSheet
+        ref={this.bs}
+        snapPoints={[330, 0]}
+        renderContent={this.renderInner}
+        renderHeader={this.renderHeader}
+        initialSnap={1}
+        callbackNode={this.fall}
+        enabledGestureInteraction={true}
+      />
+      <Animated.View
+        style={{
+          margin: 20,
+          opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
+        }}
+      >
         <View style={{ alignItems: "center" }}>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => this.bs.current.snapTo(0)}>
             <View
               style={{
                 height: 100,
@@ -29,44 +140,45 @@ export default function EditProfileScreen() {
                 alignItems: "center",
               }}
             >
-              <ImageBackground
-                source={require("../assets/images/default-user.png")}
-                style={{ height: 100, width: 100 }}
-                imageStyle={{ borderRadius: 15 }}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
+              {pickedImagePath !== "" && (
+                <ImageBackground
+                  source={{
+                    uri: pickedImagePath,
                   }}
+                  style={{ height: 100, width: 100 }}
+                  imageStyle={{ borderRadius: 15 }}
                 >
-                  <MaterialIcons
-                    name="photo-camera"
-                    size={35}
-                    color="#fff"
+                  <View
                     style={{
-                      opacity: 0.7,
-                      alignItems: "center",
+                      flex: 1,
                       justifyContent: "center",
-                      borderWidth: 1,
-                      borderColor: "#fff",
-                      borderRadius: 10,
+                      alignItems: "center",
                     }}
-                  />
-                </View>
-              </ImageBackground>
+                  >
+                    <MaterialIcons
+                      name="photo-camera"
+                      size={35}
+                      color="#fff"
+                      style={{
+                        opacity: 0.7,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderWidth: 1,
+                        borderColor: "#fff",
+                        borderRadius: 10,
+                      }}
+                    />
+                  </View>
+                </ImageBackground>
+              )}
             </View>
           </TouchableOpacity>
-          <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>
-            John Doe
-          </Text>
         </View>
 
         <View style={styles.action}>
           <Feather name="user" size={24} color="black" />
           <TextInput
-            placeholder="First Name"
+            placeholder="Full Name"
             placeholderTextColor="#666666"
             autoCorrect={false}
             style={styles.textInput}
@@ -97,7 +209,7 @@ export default function EditProfileScreen() {
         <TouchableOpacity style={styles.commandButton} onPress={() => {}}>
           <Text>Submit</Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     </View>
   );
 }

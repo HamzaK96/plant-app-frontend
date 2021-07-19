@@ -14,17 +14,19 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 // import { createStackNavigator } from 'react-navigation-stack'
 
 import firebase from "firebase/app";
+import "firebase/firestore";
 import "firebase/auth";
 import { theme } from "./src/core/theme";
 import {
   LoginScreen,
-  Pred,
-  Cam,
+  //   Pred,
+  //   Cam,
   RegisterScreen,
   ResetPasswordScreen,
   AuthLoadingScreen,
-  ProfileScreen,
-  EditProfileScreen,
+  //   ProfileScreen,
+  //   EditProfileScreen,
+  DrawerRoutes,
 } from "./src/screens";
 
 import { FIREBASE_CONFIG } from "./src/core/config";
@@ -35,105 +37,106 @@ import { DrawerContent } from "./src/screens/DrawerContent";
 const Stack = createStackNavigator();
 if (!firebase.apps.length) {
   firebase.initializeApp(FIREBASE_CONFIG);
+  const db = firebase.firestore();
 }
 
-const HomeStack = createStackNavigator();
-const ProfileStack = createStackNavigator();
-const FeedStack = createStackNavigator();
-const FavouritesStack = createStackNavigator();
+// const HomeStack = createStackNavigator();
+// const ProfileStack = createStackNavigator();
+// const FeedStack = createStackNavigator();
+// const FavouritesStack = createStackNavigator();
 
-const Drawer = createDrawerNavigator();
+// const Drawer = createDrawerNavigator();
 
-const HomeStackScreen = ({ navigation }) => (
-  <HomeStack.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: "#242424",
-      },
-      headerTitleStyle: {
-        textAlign: "center",
-        alignSelf: "center", //if style using flexbox
-      },
-    }}
-  >
-    <HomeStack.Screen
-      name="cam"
-      component={Cam}
-      options={{
-        title: "Home",
-        headerLeft: () => (
-          <Ionicons
-            name="ios-menu"
-            size={25}
-            color="white"
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-          ></Ionicons>
-        ),
-      }}
-    />
-  </HomeStack.Navigator>
-);
+// const HomeStackScreen = ({ navigation }) => (
+//   <HomeStack.Navigator
+//     screenOptions={{
+//       headerStyle: {
+//         backgroundColor: "#242424",
+//       },
+//       headerTitleStyle: {
+//         textAlign: "center",
+//         alignSelf: "center", //if style using flexbox
+//       },
+//     }}
+//   >
+//     <HomeStack.Screen
+//       name="cam"
+//       component={Cam}
+//       options={{
+//         title: "Home",
+//         headerLeft: () => (
+//           <Ionicons
+//             name="ios-menu"
+//             size={25}
+//             color="white"
+//             onPress={() => {
+//               navigation.openDrawer();
+//             }}
+//           ></Ionicons>
+//         ),
+//       }}
+//     />
+//   </HomeStack.Navigator>
+// );
 
-const ProfileStackScreen = ({ navigation }) => (
-  <ProfileStack.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: "#242424",
-      },
-      headerTitleStyle: {
-        textAlign: "center",
-        alignSelf: "center", //if style using flexbox
-      },
-    }}
-  >
-    <ProfileStack.Screen
-      name="ProfileScreen"
-      component={ProfileScreen}
-      options={{
-        title: "Profile",
-        headerLeft: () => (
-          <Ionicons
-            name="ios-menu"
-            size={25}
-            color="white"
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-          ></Ionicons>
-        ),
-        headerRight: () => (
-          <MaterialCommunityIcons
-            name="account-edit"
-            size={25}
-            color="white"
-            onPress={() => navigation.navigate("EditProfile")}
-          ></MaterialCommunityIcons>
-        ),
-      }}
-    />
+// const ProfileStackScreen = ({ navigation }) => (
+//   <ProfileStack.Navigator
+//     screenOptions={{
+//       headerStyle: {
+//         backgroundColor: "#242424",
+//       },
+//       headerTitleStyle: {
+//         textAlign: "center",
+//         alignSelf: "center", //if style using flexbox
+//       },
+//     }}
+//   >
+//     <ProfileStack.Screen
+//       name="ProfileScreen"
+//       component={ProfileScreen}
+//       options={{
+//         title: "Profile",
+//         headerLeft: () => (
+//           <Ionicons
+//             name="ios-menu"
+//             size={25}
+//             color="white"
+//             onPress={() => {
+//               navigation.openDrawer();
+//             }}
+//           ></Ionicons>
+//         ),
+//         headerRight: () => (
+//           <MaterialCommunityIcons
+//             name="account-edit"
+//             size={25}
+//             color="white"
+//             onPress={() => navigation.navigate("EditProfile")}
+//           ></MaterialCommunityIcons>
+//         ),
+//       }}
+//     />
 
-    <ProfileStack.Screen
-      name="EditProfile"
-      component={EditProfileScreen}
-      options={{
-        title: "Edit Profile",
-      }}
-    />
-  </ProfileStack.Navigator>
-);
+//     <ProfileStack.Screen
+//       name="EditProfile"
+//       component={EditProfileScreen}
+//       options={{
+//         title: "Edit Profile",
+//       }}
+//     />
+//   </ProfileStack.Navigator>
+// );
 
-function DrawerRoutes() {
-  return (
-    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
-      <Drawer.Screen name="HomeDrawer" component={HomeStackScreen} />
-      <Drawer.Screen name="ProfileDrawer" component={ProfileStackScreen} />
-      {/* <Drawer.Screen name="FeedDrawer" component={FeedStackScreen} />
-      <Drawer.Screen name="FavouritesDrawer" component={FavouritesStackScreen} /> */}
-    </Drawer.Navigator>
-  );
-}
+// function DrawerRoutes() {
+//   return (
+//     <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
+//       <Drawer.Screen name="HomeDrawer" component={HomeStackScreen} />
+//       <Drawer.Screen name="ProfileDrawer" component={ProfileStackScreen} />
+//       {/* <Drawer.Screen name="FeedDrawer" component={FeedStackScreen} />
+//       <Drawer.Screen name="FavouritesDrawer" component={FavouritesStackScreen} /> */}
+//     </Drawer.Navigator>
+//   );
+// }
 
 export default function App() {
   return (
