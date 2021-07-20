@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
@@ -12,12 +12,16 @@ import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
 import { loginUser } from '../api/auth-api'
 import Toast from '../components/Toast'
+import {AuthContext} from '../api/auth-api'
+import { AuthProvider } from '../api/auth-api'
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
   const [loading, setLoading] = useState()
   const [error, setError] = useState()
+
+//   const {loginUser} = useContext(AuthContext)
 
   const onLoginPressed = async () => {
     const emailError = emailValidator(email.value)
@@ -32,6 +36,11 @@ export default function LoginScreen({ navigation }) {
       email: email.value,
       password: password.value,
     })
+    // const response = loginUser({
+    //     email: email.value, 
+    //     password: password.value,
+    // })
+
     if (response.error) {
       setError(response.error)
     }

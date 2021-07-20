@@ -10,25 +10,63 @@ import {
   StyleSheet,
 } from "react-native";
 
-import { MaterialIcons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
 import { theme } from "../core/theme";
+import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+import { titleValidator } from "../helpers/titleValidator";
+import { questionValidator } from "../helpers/questionValidator";
+// import TextInput from "../components/TextInput";
 
 import BottomSheet from "reanimated-bottom-sheet";
 import Animated from "react-native-reanimated";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import exampleImageUser from "../assets/images/default-user.png";
+import exampleImagePlant from "../assets/images/default-user.png";
+import firebase from "firebase/app";
+// import { firebase } from "@react-native-firebase/auth";
 
-export default function EditProfileScreen() {
-  const exampleImageUri = Image.resolveAssetSource(exampleImageUser).uri;
+export default function CreatePostScreen() {
+  const exampleImageUri = Image.resolveAssetSource(exampleImagePlant).uri;
   // The path of the picked image
-  const [pickedImagePath, setPickedImagePath] = useState(
-    exampleImageUri
-  );
+  const [pickedImagePath, setPickedImagePath] = useState(exampleImageUri);
+  const [title, setTitle] = useState({ value: "", error: "" });
+  const [question, setQuestion] = useState({ value: "", error: "" });
+  const [loading, setLoading] = useState();
+  const [error, setError] = useState();
 
-  // This function is triggered when the "Select an image" button pressed
+  savePost = async () => {
+    const titleError = titleValidator(title.value);
+    const questionError = questionValidator(question.value);
+    if (titleError) {
+      setTitle({ ...title, error: titleError });
+      alert(titleError);
+      return;
+    }
+
+    if (questionError) {
+        setQuestion({...question, error: questionError});
+        alert(questionError);
+        return
+    }
+
+    //console.log("Save Post entered");
+    setLoading(true);
+    try {
+      await firebase.firestore().collection("posts").add({
+        user_id: "",
+        post_title: title.value,
+        post_question: question.value,
+      });
+
+      alert("Post Created Successfully!")
+    } catch (error) {
+      console.log(error);
+    }
+
+    setLoading(false);
+  };
+
   showImagePicker = async () => {
     const status = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
@@ -83,7 +121,7 @@ export default function EditProfileScreen() {
     <View style={styles.panel}>
       <View style={{ alignItems: "center" }}>
         <Text style={styles.panelTitle}>Upload Photo</Text>
-        <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+        <Text style={styles.panelSubtitle}>Choose Your Plant Picture</Text>
       </View>
 
       <TouchableOpacity style={styles.panelButton} onPress={openCamera}>
@@ -176,37 +214,36 @@ export default function EditProfileScreen() {
         </View>
 
         <View style={styles.action}>
-          <Feather name="user" size={24} color="black" />
+          <MaterialCommunityIcons name="format-title" size={24} color="white" />
           <TextInput
-            placeholder="Full Name"
+            placeholder="Write Title"
             placeholderTextColor="#666666"
+            onChangeText={(text) => setTitle({ value: text, error: "" })}
             autoCorrect={false}
+            error={!!title.error}
             style={styles.textInput}
+            errorText={title.error}
           />
         </View>
 
         <View style={styles.action}>
-          <MaterialIcons name="phone" size={24} color="white" />
+          <MaterialCommunityIcons
+            name="head-question"
+            size={24}
+            color="white"
+          />
           <TextInput
-            placeholder="Phone"
+            placeholder="What is your issue?"
             placeholderTextColor="#666666"
-            keyboardType="number-pad"
             autoCorrect={false}
+            onChangeText={(text) => setQuestion({ value: text, error: "" })}
             style={styles.textInput}
+            error={!!question.error}
+            errorText={question.error}
           />
         </View>
 
-        <View style={styles.action}>
-          <MaterialIcons name="location-on" size={24} color="white" />
-          <TextInput
-            placeholder="Location"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            style={styles.textInput}
-          />
-        </View>
-
-        <TouchableOpacity style={styles.commandButton} onPress={() => {}}>
+        <TouchableOpacity style={styles.commandButton} onPress={savePost}>
           <Text>Submit</Text>
         </TouchableOpacity>
       </Animated.View>

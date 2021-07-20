@@ -5,15 +5,18 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 // import { NavigationContainer } from 'react-navigation'
 // import { createStackNavigator } from 'react-navigation-stack'
 
 import firebase from "firebase/app";
 import "firebase/auth";
-import Cam from './Cam'
-import ProfileScreen from './ProfileScreen'
-import EditProfileScreen from './EditProfileScreen'
+import Cam from "./Cam";
+import ProfileScreen from "./ProfileScreen";
+import EditProfileScreen from "./EditProfileScreen";
+import FeedScreen from "./FeedScreen";
+import CreatePostScreen from "./CreatePostScreen";
 // import {
 // //   LoginScreen,
 // //   Pred,
@@ -40,6 +43,54 @@ const FeedStack = createStackNavigator();
 const FavouritesStack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
+
+const FeedStackScreen = ({ navigation }) => (
+  <FeedStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#242424",
+      },
+      headerTitleStyle: {
+        textAlign: "center",
+        alignSelf: "center", //if style using flexbox
+      },
+    }}
+  >
+    <FeedStack.Screen
+      name="FeedScreen"
+      component={FeedScreen}
+      options={{
+        title: "Community Feed",
+        headerLeft: () => (
+          <Ionicons
+            name="ios-menu"
+            size={25}
+            color="white"
+            onPress={() => {
+              navigation.openDrawer();
+            }}
+          ></Ionicons>
+        ),
+        headerRight: () => (
+          <MaterialIcons
+            name="create"
+            size={25}
+            color="white"
+            onPress={() => navigation.navigate("CreatePost")}
+          ></MaterialIcons>
+        ),
+      }}
+    />
+
+    <FeedStack.Screen
+      name="CreatePost"
+      component={CreatePostScreen}
+      options={{
+        title: "Create Post",
+      }}
+    />
+  </FeedStack.Navigator>
+);
 
 const HomeStackScreen = ({ navigation }) => (
   <HomeStack.Navigator
@@ -126,8 +177,8 @@ export default function DrawerRoutes() {
     <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="HomeDrawer" component={HomeStackScreen} />
       <Drawer.Screen name="ProfileDrawer" component={ProfileStackScreen} />
-      {/* <Drawer.Screen name="FeedDrawer" component={FeedStackScreen} />
-      <Drawer.Screen name="FavouritesDrawer" component={FavouritesStackScreen} /> */}
+      <Drawer.Screen name="FeedDrawer" component={FeedStackScreen} />
+      {/* <Drawer.Screen name="FavouritesDrawer" component={FavouritesStackScreen} /> */}
     </Drawer.Navigator>
   );
 }

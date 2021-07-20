@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet } from "react-native";
 import {
   useTheme,
@@ -13,15 +13,19 @@ import {
 } from "react-native-paper";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { logoutUser } from "../api/auth-api";
+import AuthContext from "../api/auth-api";
+import { AuthProvider } from "../api/auth-api";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
 export function DrawerContent(props) {
+  //   const { logoutUser } = useContext(AuthContext);
+
   const onLogoutPressed = async () => {
     const response = await logoutUser();
-    props.navigation.navigate('LoginScreen')
-  }
+    props.navigation.navigate("LoginScreen");
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -49,21 +53,27 @@ export function DrawerContent(props) {
               <MaterialIcons name="home" color={color} size={size} />
             )}
             label="Home"
-            onPress={() => {props.navigation.navigate('HomeDrawer')}}
+            onPress={() => {
+              props.navigation.navigate("HomeDrawer");
+            }}
           />
           <DrawerItem
             icon={({ color, size }) => (
               <MaterialIcons name="account-circle" color={color} size={size} />
             )}
             label="Profile"
-            onPress={() => {props.navigation.navigate('ProfileDrawer')}}
+            onPress={() => {
+              props.navigation.navigate("ProfileDrawer");
+            }}
           />
           <DrawerItem
             icon={({ color, size }) => (
               <MaterialIcons name="forum" color={color} size={size} />
             )}
             label="Community Feed"
-            onPress={() => {}}
+            onPress={() => {
+              props.navigation.navigate("FeedDrawer");
+            }}
           />
           <DrawerItem
             icon={({ color, size }) => (

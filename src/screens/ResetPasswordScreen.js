@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Background from '../components/Background'
 import BackButton from '../components/BackButton'
 import Logo from '../components/Logo'
@@ -9,10 +9,15 @@ import { emailValidator } from '../helpers/emailValidator'
 import { sendEmailWithPassword } from '../api/auth-api'
 import Toast from '../components/Toast'
 
+import AuthContext from '../api/auth-api'
+import { AuthProvider } from '../api/auth-api'
+
 export default function ResetPasswordScreen({ navigation }) {
   const [email, setEmail] = useState({ value: '', error: '' })
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState({ value: '', type: '' })
+
+//   const {sendEmailWithPassword} = useContext(AuthContext)
 
   const sendResetPasswordEmail = async () => {
     const emailError = emailValidator(email.value)
@@ -22,6 +27,9 @@ export default function ResetPasswordScreen({ navigation }) {
     }
     setLoading(true)
     const response = await sendEmailWithPassword(email.value)
+
+    // const response = sendEmailWithPassword(email.value)
+
     if (response.error) {
       setToast({ type: 'error', message: response.error })
     } else {
