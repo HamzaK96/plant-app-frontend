@@ -4,12 +4,15 @@ import firebase from "firebase/app";
 import "firebase/auth";
 // import firestore from "firebase/firestore";
 
+import AsyncStorage from "@react-native-community/async-storage";
+import { USER_STORAGE } from "../helpers/globalvariables";
+
 export const logoutUser = () => {
   firebase.auth().signOut();
 };
 
 export const signUpUser = async ({ name, email, password }) => {
-//    const [user, setUser] = useState(null);
+  //    const [user, setUser] = useState(null);
 
   try {
     const user = await firebase
@@ -75,5 +78,37 @@ export const sendEmailWithPassword = async (email) => {
     return {
       error: error.message,
     };
+  }
+};
+
+export const saveData = async (uid) => {
+  //   console.log("saving data...");
+  try {
+    await AsyncStorage.setItem("USER_STORAGE", uid);
+    // console.log("UID: ", uid);
+    alert("Data successfully saved");
+  } catch (e) {
+    alert("Failed to save the data to the storage");
+  }
+};
+
+export const readData = async () => {
+  //   console.log("reading data...");
+  try {
+    await AsyncStorage.getItem("USER_STORAGE").then((user_id) => {
+      console.log("USER_ID: ", user_id);
+      return user_id;
+    });
+  } catch (e) {
+    alert("Failed to fetch the data from storage");
+  }
+};
+
+export const clearStorage = async () => {
+  try {
+    await AsyncStorage.removeItem("USER_STORAGE");
+    alert("Storage successfully cleared!");
+  } catch (e) {
+    alert("Failed to clear the async storage.");
   }
 };

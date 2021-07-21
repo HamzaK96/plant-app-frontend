@@ -34,6 +34,10 @@ import { Icon } from "native-base";
 
 import { DrawerContent } from "./src/screens/DrawerContent";
 
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+
+
 const Stack = createStackNavigator();
 if (!firebase.apps.length) {
   firebase.initializeApp(FIREBASE_CONFIG);

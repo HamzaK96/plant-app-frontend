@@ -12,18 +12,20 @@ import {
   Switch,
 } from "react-native-paper";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { logoutUser } from "../api/auth-api";
+import { clearStorage, logoutUser } from "../api/auth-api";
 import AuthContext from "../api/auth-api";
 import { AuthProvider } from "../api/auth-api";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export function DrawerContent(props) {
   //   const { logoutUser } = useContext(AuthContext);
 
   const onLogoutPressed = async () => {
     const response = await logoutUser();
+    clearStorage()
     props.navigation.navigate("LoginScreen");
   };
 
