@@ -31,6 +31,7 @@ import CreatePostScreen from "./CreatePostScreen";
 // import { FIREBASE_CONFIG } from "./src/core/config";
 
 import { DrawerContent } from "./DrawerContent";
+import Pred from "./Pred";
 
 // const Stack = createStackNavigator();
 // if (!firebase.apps.length) {
@@ -121,6 +122,24 @@ const HomeStackScreen = ({ navigation }) => (
         ),
       }}
     />
+    <HomeStack.Screen
+      name="pred"
+      component={Pred}
+      options={{
+        title: "Home",
+        headerLeft: () => (
+          <Ionicons
+            name="ios-menu"
+            size={25}
+            color="white"
+            onPress={() => {
+              navigation.openDrawer();
+            }}
+          ></Ionicons>
+        ),
+      }}
+    />
+
   </HomeStack.Navigator>
 );
 
