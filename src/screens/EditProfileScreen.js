@@ -20,13 +20,39 @@ import Animated from "react-native-reanimated";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import exampleImageUser from "../assets/images/default-user.png";
+import firebase from "firebase/app";
+
+import AsyncStorage from "@react-native-community/async-storage";
+import { USER_STORAGE } from "../helpers/globalvariables";
 
 export default function EditProfileScreen() {
   const exampleImageUri = Image.resolveAssetSource(exampleImageUser).uri;
   // The path of the picked image
-  const [pickedImagePath, setPickedImagePath] = useState(
-    exampleImageUri
-  );
+  const [pickedImagePath, setPickedImagePath] = useState(exampleImageUri);
+  const [user_name_current, setUserName] = useState("");
+  const [user_phone_current, setUserPhone] = useState("");
+  const [user_location_current, setUserLocation] = useState("");
+
+  addToUserDatabase = async () => {
+    AsyncStorage.getItem("USER_STORAGE").then((user_id) => {
+      //alert(user_id);
+      var user_ref = firebase.firestore().collection("users").doc(user_id);
+
+      return user_ref
+        .update({
+          user_name: user_name_current,
+          user_phone: user_phone_current,
+          user_location: user_location_current
+        })
+        .then(() => {
+          console.log("Document successfully updated!");
+        })
+        .catch((error) => {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+        });
+    });
+  };
 
   // This function is triggered when the "Select an image" button pressed
   showImagePicker = async () => {
@@ -180,6 +206,7 @@ export default function EditProfileScreen() {
           <TextInput
             placeholder="Full Name"
             placeholderTextColor="#666666"
+            onChangeText={(name) => setUserName(name)}
             autoCorrect={false}
             style={styles.textInput}
           />
@@ -190,6 +217,7 @@ export default function EditProfileScreen() {
           <TextInput
             placeholder="Phone"
             placeholderTextColor="#666666"
+            onChangeText={(phone) => setUserPhone(phone)}
             keyboardType="number-pad"
             autoCorrect={false}
             style={styles.textInput}
@@ -201,12 +229,16 @@ export default function EditProfileScreen() {
           <TextInput
             placeholder="Location"
             placeholderTextColor="#666666"
+            onChangeText={(location) => setUserLocation(location)}
             autoCorrect={false}
             style={styles.textInput}
           />
         </View>
 
-        <TouchableOpacity style={styles.commandButton} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.commandButton}
+          onPress={addToUserDatabase}
+        >
           <Text>Submit</Text>
         </TouchableOpacity>
       </Animated.View>
