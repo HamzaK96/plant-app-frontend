@@ -6,6 +6,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { StyleSheet, Text, View } from "react-native";
 
 // import { NavigationContainer } from 'react-navigation'
 // import { createStackNavigator } from 'react-navigation-stack'
@@ -45,6 +46,34 @@ const FavouritesStack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
+const LeftButton = ({ navigation }) => {
+  return (
+    <View style={padding.paddingLeft}>
+      <Ionicons
+        name="ios-menu"
+        size={25}
+        color="white"
+        onPress={() => {
+          navigation.openDrawer();
+        }}
+      ></Ionicons>
+    </View>
+  );
+};
+
+const RightButton = ({ navigation }) => {
+  return (
+    <View style={padding.paddingRight}>
+      <MaterialCommunityIcons
+        name="account-edit"
+        size={25}
+        color="white"
+        onPress={() => navigation.navigate("EditProfile")}
+      ></MaterialCommunityIcons>
+    </View>
+  );
+};
+
 const FeedStackScreen = ({ navigation }) => (
   <FeedStack.Navigator
     screenOptions={{
@@ -62,23 +91,16 @@ const FeedStackScreen = ({ navigation }) => (
       component={FeedScreen}
       options={{
         title: "Community Feed",
-        headerLeft: () => (
-          <Ionicons
-            name="ios-menu"
-            size={25}
-            color="white"
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-          ></Ionicons>
-        ),
+        headerLeft: () => <LeftButton navigation={navigation} />,
         headerRight: () => (
-          <MaterialIcons
-            name="create"
-            size={25}
-            color="white"
-            onPress={() => navigation.navigate("CreatePost")}
-          ></MaterialIcons>
+          <View style={padding.paddingRight}>
+            <MaterialIcons
+              name="create"
+              size={25}
+              color="white"
+              onPress={() => navigation.navigate("CreatePost")}
+            ></MaterialIcons>
+          </View>
         ),
       }}
     />
@@ -110,16 +132,7 @@ const HomeStackScreen = ({ navigation }) => (
       component={Cam}
       options={{
         title: "Home",
-        headerLeft: () => (
-          <Ionicons
-            name="ios-menu"
-            size={25}
-            color="white"
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-          ></Ionicons>
-        ),
+        headerLeft: () => <LeftButton navigation={navigation} />,
       }}
     />
     <HomeStack.Screen
@@ -127,19 +140,9 @@ const HomeStackScreen = ({ navigation }) => (
       component={Pred}
       options={{
         title: "Home",
-        headerLeft: () => (
-          <Ionicons
-            name="ios-menu"
-            size={25}
-            color="white"
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-          ></Ionicons>
-        ),
+        headerLeft: () => <LeftButton navigation={navigation} />,
       }}
     />
-
   </HomeStack.Navigator>
 );
 
@@ -160,24 +163,8 @@ const ProfileStackScreen = ({ navigation }) => (
       component={ProfileScreen}
       options={{
         title: "Profile",
-        headerLeft: () => (
-          <Ionicons
-            name="ios-menu"
-            size={25}
-            color="white"
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-          ></Ionicons>
-        ),
-        headerRight: () => (
-          <MaterialCommunityIcons
-            name="account-edit"
-            size={25}
-            color="white"
-            onPress={() => navigation.navigate("EditProfile")}
-          ></MaterialCommunityIcons>
-        ),
+        headerLeft: () => <LeftButton navigation={navigation} />,
+        headerRight: () => <RightButton navigation={navigation} />,
       }}
     />
 
@@ -201,3 +188,12 @@ export default function DrawerRoutes() {
     </Drawer.Navigator>
   );
 }
+
+const padding = StyleSheet.create({
+  paddingLeft: {
+    paddingLeft: 12,
+  },
+  paddingRight: {
+    paddingRight: 12,
+  },
+});
