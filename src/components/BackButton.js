@@ -10,6 +10,7 @@ export default function BackButton({ goBack }) {
         source={require('../assets/arrow_back.png')}
       />
     </TouchableOpacity>
+    <View></View>
   )
 }
 
