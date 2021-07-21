@@ -158,6 +158,7 @@ const ProfileStackScreen = ({ navigation }) => (
       },
     }}
   >
+      
     <ProfileStack.Screen
       name="ProfileScreen"
       component={ProfileScreen}
