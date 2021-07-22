@@ -28,6 +28,8 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { USER_STORAGE } from "../helpers/globalvariables";
 // import { firebase } from "@react-native-firebase/auth";
 import storage from "@react-native-firebase/storage";
+import { v4 as uuidv4 } from "uuid";
+import { uploadImageToCloud } from "../api/auth-api";
 
 export default function CreatePostScreen() {
   const exampleImageUri = Image.resolveAssetSource(exampleImagePlant).uri;
@@ -41,7 +43,7 @@ export default function CreatePostScreen() {
   const [user_name_current, setUserName] = useState("");
   const [user_email_current, setUserEmail] = useState("");
 
-  savePost = async () => {
+  const savePost = async () => {
     const titleError = titleValidator(title.value);
     const questionError = questionValidator(question.value);
 
@@ -60,7 +62,7 @@ export default function CreatePostScreen() {
     AsyncStorage.getItem("USER_STORAGE").then((user_id) => {
       //   alert(user_id);
 
-    //   setUserID(user_id);
+      //   setUserID(user_id);
 
       var docRef = firebase.firestore().collection("users").doc(user_id);
 
@@ -121,7 +123,8 @@ export default function CreatePostScreen() {
     setLoading(false);
   };
 
-  showImagePicker = async () => {
+  const showImagePicker = async () => {
+    // console.log("here");
     const status = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
     //console.log("Camera Permission Granted")
@@ -134,23 +137,38 @@ export default function CreatePostScreen() {
 
     // console.log("Status:", status)
 
+    // console.debug("Show imagepicker");
+
     let result = await ImagePicker.launchImageLibraryAsync({
       quality: 1,
       allowsEditing: true,
       aspect: [1, 1],
     });
 
+    // console.log("Result: ", result);
+
     if (!result.cancelled) {
       setPickedImagePath(result.uri);
-      console.log(result.uri);
 
-      //   const { success, path, url } = await uploadImageToCloud(response.uri, response.type, logoPath)
+      //   const {success, path, url} = await uploadImageToCloud(result.uri, result.type)
+    //   console.log(result.uri);
+
+
+      console.log("RESULT: ", result);
+      const { success, path, url } = await uploadImageToCloud(
+        result.uri,
+        result.type
+      );
+
+
+    //   console.log("PATH: ", path);
+    //   console.log("URL: ", url);
       //   if (success) { setPickedImageURL(path) }
     }
   };
 
   // This function is triggered when the "Open camera" button pressed
-  openCamera = async () => {
+  const openCamera = async () => {
     console.log("Camera Accessed");
 
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -174,7 +192,7 @@ export default function CreatePostScreen() {
     }
   };
 
-  renderInner = () => (
+  const renderInner = () => (
     <View style={styles.panel}>
       <View style={{ alignItems: "center" }}>
         <Text style={styles.panelTitle}>Upload Photo</Text>
@@ -189,14 +207,14 @@ export default function CreatePostScreen() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.panelButton}
-        onPress={() => this.bs.current.snapTo(1)}
+        onPress={() => bs.current.snapTo(1)}
       >
         <Text style={styles.panelButtonTitle}>Cancel</Text>
       </TouchableOpacity>
     </View>
   );
 
-  renderHeader = () => (
+  const renderHeader = () => (
     <View style={styles.header}>
       <View style={styles.panelHeader}>
         <View style={styles.panelHandle}></View>
@@ -204,28 +222,28 @@ export default function CreatePostScreen() {
     </View>
   );
 
-  bs = React.createRef();
-  fall = new Animated.Value(1);
+  let bs = React.createRef();
+  let fall = new Animated.Value(1);
 
   return (
     <View style={styles.container}>
       <BottomSheet
-        ref={this.bs}
+        ref={bs}
         snapPoints={[330, 0]}
-        renderContent={this.renderInner}
-        renderHeader={this.renderHeader}
+        renderContent={renderInner}
+        renderHeader={renderHeader}
         initialSnap={1}
-        callbackNode={this.fall}
+        callbackNode={fall}
         enabledGestureInteraction={true}
       />
       <Animated.View
         style={{
           margin: 20,
-          opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
+          opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)),
         }}
       >
         <View style={{ alignItems: "center" }}>
-          <TouchableOpacity onPress={() => this.bs.current.snapTo(0)}>
+          <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
             <View
               style={{
                 height: 100,
