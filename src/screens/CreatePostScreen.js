@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -24,7 +24,10 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import exampleImagePlant from "../assets/images/default-user.png";
 import firebase from "firebase/app";
+import AsyncStorage from "@react-native-community/async-storage";
+import { USER_STORAGE } from "../helpers/globalvariables";
 // import { firebase } from "@react-native-firebase/auth";
+import storage from "@react-native-firebase/storage";
 
 export default function CreatePostScreen() {
   const exampleImageUri = Image.resolveAssetSource(exampleImagePlant).uri;
@@ -34,10 +37,14 @@ export default function CreatePostScreen() {
   const [question, setQuestion] = useState({ value: "", error: "" });
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
+  const [user_id_current, setUserID] = useState("");
+  const [user_name_current, setUserName] = useState("");
+  const [user_email_current, setUserEmail] = useState("");
 
   savePost = async () => {
     const titleError = titleValidator(title.value);
     const questionError = questionValidator(question.value);
+
     if (titleError) {
       setTitle({ ...title, error: titleError });
       alert(titleError);
@@ -45,24 +52,71 @@ export default function CreatePostScreen() {
     }
 
     if (questionError) {
-        setQuestion({...question, error: questionError});
-        alert(questionError);
-        return
+      setQuestion({ ...question, error: questionError });
+      alert(questionError);
+      return;
     }
 
-    //console.log("Save Post entered");
+    AsyncStorage.getItem("USER_STORAGE").then((user_id) => {
+      //   alert(user_id);
+
+    //   setUserID(user_id);
+
+      var docRef = firebase.firestore().collection("users").doc(user_id);
+
+      docRef
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            // setUserName(doc.data()["user_name"]);
+            // setUserEmail(doc.data()["user_email"]);
+
+            try {
+              firebase
+                .firestore()
+                .collection("posts")
+                .add({
+                  user_id: user_id,
+                  user_name: doc.data()["user_name"],
+                  user_email: doc.data()["user_email"],
+                  post_title: title.value,
+                  post_question: question.value,
+                  // post_image: pickedimgurl,
+                })
+                .then(() => {
+                  alert("Post Created Successfully!");
+                });
+            } catch (error) {
+              console.log(error);
+            }
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting document:", error);
+        });
+    });
+
+    // console.log("USER_ID_POST: ", user_id_current);
+
     setLoading(true);
-    try {
-      await firebase.firestore().collection("posts").add({
-        user_id: "",
-        post_title: title.value,
-        post_question: question.value,
-      });
 
-      alert("Post Created Successfully!")
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   await firebase.firestore().collection("posts").add({
+    //     user_id: user_id_current,
+    //     user_name: user_name_current,
+    //     user_email: user_email_current,
+    //     post_title: title.value,
+    //     post_question: question.value,
+    //     // post_image: pickedimgurl,
+    //   });
+
+    //   alert("Post Created Successfully!");
+    // } catch (error) {
+    //   console.log(error);
+    // }
 
     setLoading(false);
   };
@@ -89,6 +143,9 @@ export default function CreatePostScreen() {
     if (!result.cancelled) {
       setPickedImagePath(result.uri);
       console.log(result.uri);
+
+      //   const { success, path, url } = await uploadImageToCloud(response.uri, response.type, logoPath)
+      //   if (success) { setPickedImageURL(path) }
     }
   };
 
