@@ -24,6 +24,7 @@ import firebase from "firebase/app";
 
 import AsyncStorage from "@react-native-community/async-storage";
 import { USER_STORAGE } from "../helpers/globalvariables";
+import storage from '@react-native-firebase/storage';
 
 export default function EditProfileScreen() {
   const exampleImageUri = Image.resolveAssetSource(exampleImageUser).uri;
