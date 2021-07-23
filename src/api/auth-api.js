@@ -131,7 +131,7 @@ export const uploadImageToCloud = async (uri, type, path) => {
     console.log("EXTENSION: ", extension);
 
     const path_to_img =
-      path || `/plant-app-database/images/${uuidv4()}.${extension}`;
+      path || `/gardenia-application/images/${uuidv4()}.${extension}`;
 
     console.log("PATH TO IMAGE: ", path_to_img);
 
