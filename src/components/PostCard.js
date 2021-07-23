@@ -20,6 +20,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { Divider } from "react-native-paper";
 
 const PostCard = ({ item }) => {
+
+
+
   likeIcon = item.liked ? "favorite" : "favorite-border";
   likeIconColor = item.liked ? "#2e64e5" : "#333";
 
@@ -42,10 +45,10 @@ const PostCard = ({ item }) => {
   return (
     <Card>
       <UserInfo>
-        <UserImg source={item.userImg} />
+        {/* <UserImg source={item.userImg} /> */}
         <UserInfoText>
           <UserName>{item.userName}</UserName>
-          <PostTime>{item.postTime}</PostTime>
+          {/* <PostTime>{item.postTime}</PostTime> */}
         </UserInfoText>
       </UserInfo>
       <PostText>{item.post}</PostText>

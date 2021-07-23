@@ -151,8 +151,7 @@ export default function CreatePostScreen() {
       setPickedImagePath(result.uri);
 
       //   const {success, path, url} = await uploadImageToCloud(result.uri, result.type)
-    //   console.log(result.uri);
-
+      //   console.log(result.uri);
 
       console.log("RESULT: ", result);
       const { success, path, url } = await uploadImageToCloud(
@@ -160,9 +159,8 @@ export default function CreatePostScreen() {
         result.type
       );
 
-
-    //   console.log("PATH: ", path);
-    //   console.log("URL: ", url);
+      //   console.log("PATH: ", path);
+      //   console.log("URL: ", url);
       //   if (success) { setPickedImageURL(path) }
     }
   };
@@ -188,7 +186,12 @@ export default function CreatePostScreen() {
 
     if (!result.cancelled) {
       setPickedImagePath(result.uri);
-      console.log(result.uri);
+
+      console.log("RESULT: ", result);
+      const { success, path, url } = await uploadImageToCloud(
+        result.uri,
+        result.type
+      );
     }
   };
 

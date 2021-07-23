@@ -123,30 +123,31 @@ export const uploadImageToCloud = async (uri, type, path) => {
   try {
     // console.log("UPLOAD IMAGE RUNS!!!!")
 
-    console.log("TYPE: ", type);
+    // console.log("TYPE: ", type);
 
     // const extension = uri.split("/")[1];
     const extension = uri.substring(uri.lastIndexOf(".") + 1);
 
-    console.log("EXTENSION: ", extension);
+    // console.log("EXTENSION: ", extension);
+
+    // const path_to_img =
+    //   path || `/plant-app-database/images/${uuidv4()}.${extension}`;
 
     const path_to_img =
-      path || `/plant-app-database/images/${uuidv4()}.${extension}`;
+      path || `/gardenia-application/images/${uuidv4()}.${extension}`;
 
     console.log("PATH TO IMAGE: ", path_to_img);
 
     // console.log("STORAGE.REF ", storage().ref(path_to_img));
 
     const storageRef = firebase.storage().ref();
-    console.log("STORAGE REF: ", storageRef);
+    // console.log("STORAGE REF: ", storageRef);
     const fileRef = storageRef.child(path_to_img);
 
     const response = await fetch(uri);
     const blob = await response.blob();
 
-    fileRef.put(blob).then(() => {
-      console.log("UPLOADED");
-    });
+    fileRef.put(blob).then(() => {});
 
     // const reference = await storage().ref(path_to_img).putFile(uri);
 
@@ -165,13 +166,55 @@ export const uploadImageToCloud = async (uri, type, path) => {
 
     // console.log("REFERENCE: ", reference);
 
-    // const url = await storage().ref(path_to_img).getDownloadURL();
+    // const storage = getStorage();
 
-    console.log("URL: ", url);
+    // console.log("STORAGE: ", storage);
+
+    // storage
+    //   .ref(path_to_img)
+    //   .getDownloadURL()
+    //   .then((url) => {
+    //     console.log("URL IMG: ", url)
+    //   });
+
+    // fileRef.getDownloadURL().then((url_img) => {
+    //     try {
+    //         console.log("URL: ", url_img);
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // });
+
+    // console.log("URL: ", url);
 
     return { success: true, path: path_to_img, url };
   } catch (error) {
     console.error(error);
     return { success: false };
+  }
+};
+
+export const getPosts = async () => {
+  const posts = [];
+  try {
+    const querySnapshot = await firebase.firestore().collection("posts").get();
+
+    // console.log("QUERYSNAPSHOT: ", querySnapshot);
+
+    if (querySnapshot && querySnapshot.size > 0) {
+      return {
+        data: querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        //   user_name: doc.user_name,
+        //   post_title: doc.post_title,
+        //   post_question: doc.post_question,
+        })),
+      };
+    }
+    return {data: []};
+  } catch (error) {
+    console.error(error);
+    return error ;
   }
 };
