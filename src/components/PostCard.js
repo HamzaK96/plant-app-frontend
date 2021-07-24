@@ -68,7 +68,7 @@ const PostCard = ({ item, navigation }) => {
           <MaterialIcons name={likeIcon} color={likeIconColor} size={24} />
           <InteractionText active>Like</InteractionText>
         </Interaction>
-        <Interaction onPress={() => navigation.navigate("AddComment")}>
+        <Interaction onPress={() => navigation.navigate("AddComment", {id: item.id})}>
           <MaterialIcons name="forum" color="white" size={24}/>
           <InteractionText>{commentText}</InteractionText>
         </Interaction>
