@@ -18,6 +18,7 @@ import ProfileScreen from "./ProfileScreen";
 import EditProfileScreen from "./EditProfileScreen";
 import FeedScreen from "./FeedScreen";
 import CreatePostScreen from "./CreatePostScreen";
+import AddCommentScreen from "./AddCommentScreen";
 // import {
 // //   LoginScreen,
 // //   Pred,
@@ -112,6 +113,14 @@ const FeedStackScreen = ({ navigation }) => (
         title: "Create Post",
       }}
     />
+
+    <FeedStack.Screen
+      name="AddComment"
+      component={AddCommentScreen}
+      options={{
+        title: "Add Comment",
+      }}
+    />
   </FeedStack.Navigator>
 );
 
@@ -158,7 +167,6 @@ const ProfileStackScreen = ({ navigation }) => (
       },
     }}
   >
-      
     <ProfileStack.Screen
       name="ProfileScreen"
       component={ProfileScreen}
@@ -179,7 +187,8 @@ const ProfileStackScreen = ({ navigation }) => (
   </ProfileStack.Navigator>
 );
 
-export default function DrawerRoutes() {
+export default function DrawerRoutes({ route, navigation }) {
+  // alert(route.params.user_id)
   return (
     <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="HomeDrawer" component={HomeStackScreen} />

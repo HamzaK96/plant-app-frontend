@@ -30,6 +30,7 @@ import { USER_STORAGE } from "../helpers/globalvariables";
 import storage from "@react-native-firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { uploadImageToCloud } from "../api/auth-api";
+import { ImageManipulator } from "expo";
 
 export default function CreatePostScreen() {
   const exampleImageUri = Image.resolveAssetSource(exampleImagePlant).uri;
@@ -42,6 +43,8 @@ export default function CreatePostScreen() {
   const [user_id_current, setUserID] = useState("");
   const [user_name_current, setUserName] = useState("");
   const [user_email_current, setUserEmail] = useState("");
+
+  const [img_url, setURL] = useState("");
 
   const savePost = async () => {
     const titleError = titleValidator(title.value);
@@ -81,9 +84,10 @@ export default function CreatePostScreen() {
                   user_id: user_id,
                   user_name: doc.data()["user_name"],
                   user_email: doc.data()["user_email"],
+                  user_image: doc.data()["user_image"],
                   post_title: title.value,
                   post_question: question.value,
-                  // post_image: pickedimgurl,
+                  post_image: img_url,
                 })
                 .then(() => {
                   alert("Post Created Successfully!");
@@ -151,8 +155,7 @@ export default function CreatePostScreen() {
       setPickedImagePath(result.uri);
 
       //   const {success, path, url} = await uploadImageToCloud(result.uri, result.type)
-    //   console.log(result.uri);
-
+      //   console.log(result.uri);
 
       console.log("RESULT: ", result);
       const { success, path, url } = await uploadImageToCloud(
@@ -160,9 +163,10 @@ export default function CreatePostScreen() {
         result.type
       );
 
+      setURL(url);
 
-    //   console.log("PATH: ", path);
-    //   console.log("URL: ", url);
+      //   console.log("PATH: ", path);
+      //   console.log("URL: ", url);
       //   if (success) { setPickedImageURL(path) }
     }
   };

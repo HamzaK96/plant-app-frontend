@@ -25,7 +25,7 @@ export function DrawerContent(props) {
 
   const onLogoutPressed = async () => {
     const response = await logoutUser();
-    clearStorage()
+    clearStorage();
     props.navigation.navigate("LoginScreen");
   };
 

@@ -23,7 +23,7 @@ export default function AuthLoadingScreen({ navigation }) {
     if (user_id != null) {
       navigation.reset({
         index: 0,
-        routes: [{ name: "Home" }],
+        routes: [{ name: "Home", params: {user_id: user_id}}],
       });
     } else {
       navigation.reset({

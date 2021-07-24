@@ -25,6 +25,7 @@ import firebase from "firebase/app";
 import AsyncStorage from "@react-native-community/async-storage";
 import { USER_STORAGE } from "../helpers/globalvariables";
 import storage from "@react-native-firebase/storage";
+import { uploadImageToCloud } from "../api/auth-api";
 
 export default function EditProfileScreen() {
   const exampleImageUri = Image.resolveAssetSource(exampleImageUser).uri;
@@ -33,6 +34,8 @@ export default function EditProfileScreen() {
   const [user_name_current, setUserName] = useState("");
   const [user_phone_current, setUserPhone] = useState("");
   const [user_location_current, setUserLocation] = useState("");
+
+  const [user_img_url, setURL] = useState("");
 
   const addToUserDatabase = async () => {
     AsyncStorage.getItem("USER_STORAGE").then((user_id) => {
@@ -43,6 +46,7 @@ export default function EditProfileScreen() {
           user_name: user_name_current,
           user_phone: user_phone_current,
           user_location: user_location_current,
+          user_image: user_img_url
         })
         .then(() => {
           console.log("Document successfully updated!");
@@ -76,7 +80,17 @@ export default function EditProfileScreen() {
 
     if (!result.cancelled) {
       setPickedImagePath(result.uri);
-      console.log(result.uri);
+
+      const { success, path, url } = await uploadImageToCloud(
+        result.uri,
+        result.type
+      );
+
+      setURL(url);
+
+      console.log("URL: ", url);
+
+    //   console.log(result.uri);
     }
   };
 
