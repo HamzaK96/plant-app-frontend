@@ -24,7 +24,8 @@ import firebase from "firebase/app";
 
 import AsyncStorage from "@react-native-community/async-storage";
 import { USER_STORAGE } from "../helpers/globalvariables";
-import storage from '@react-native-firebase/storage';
+import storage from "@react-native-firebase/storage";
+import { uploadImageToCloud } from "../api/auth-api";
 
 export default function EditProfileScreen() {
   const exampleImageUri = Image.resolveAssetSource(exampleImageUser).uri;
@@ -34,16 +35,18 @@ export default function EditProfileScreen() {
   const [user_phone_current, setUserPhone] = useState("");
   const [user_location_current, setUserLocation] = useState("");
 
-  addToUserDatabase = async () => {
+  const [user_img_url, setURL] = useState("");
+
+  const addToUserDatabase = async () => {
     AsyncStorage.getItem("USER_STORAGE").then((user_id) => {
       //alert(user_id);
       var user_ref = firebase.firestore().collection("users").doc(user_id);
-
       return user_ref
         .update({
           user_name: user_name_current,
           user_phone: user_phone_current,
-          user_location: user_location_current
+          user_location: user_location_current,
+          user_image: user_img_url
         })
         .then(() => {
           console.log("Document successfully updated!");
@@ -56,7 +59,7 @@ export default function EditProfileScreen() {
   };
 
   // This function is triggered when the "Select an image" button pressed
-  showImagePicker = async () => {
+  const showImagePicker = async () => {
     const status = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
     //console.log("Camera Permission Granted")
@@ -77,12 +80,22 @@ export default function EditProfileScreen() {
 
     if (!result.cancelled) {
       setPickedImagePath(result.uri);
-      console.log(result.uri);
+
+      const { success, path, url } = await uploadImageToCloud(
+        result.uri,
+        result.type
+      );
+
+      setURL(url);
+
+      console.log("URL: ", url);
+
+    //   console.log(result.uri);
     }
   };
 
   // This function is triggered when the "Open camera" button pressed
-  openCamera = async () => {
+  const openCamera = async () => {
     console.log("Camera Accessed");
 
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -106,7 +119,7 @@ export default function EditProfileScreen() {
     }
   };
 
-  renderInner = () => (
+  const renderInner = () => (
     <View style={styles.panel}>
       <View style={{ alignItems: "center" }}>
         <Text style={styles.panelTitle}>Upload Photo</Text>
@@ -121,14 +134,14 @@ export default function EditProfileScreen() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.panelButton}
-        onPress={() => this.bs.current.snapTo(1)}
+        onPress={() => bs.current.snapTo(1)}
       >
         <Text style={styles.panelButtonTitle}>Cancel</Text>
       </TouchableOpacity>
     </View>
   );
 
-  renderHeader = () => (
+  const renderHeader = () => (
     <View style={styles.header}>
       <View style={styles.panelHeader}>
         <View style={styles.panelHandle}></View>
@@ -136,28 +149,28 @@ export default function EditProfileScreen() {
     </View>
   );
 
-  bs = React.createRef();
-  fall = new Animated.Value(1);
+  let bs = React.createRef();
+  let fall = new Animated.Value(1);
 
   return (
     <View style={styles.container}>
       <BottomSheet
-        ref={this.bs}
+        ref={bs}
         snapPoints={[330, 0]}
-        renderContent={this.renderInner}
-        renderHeader={this.renderHeader}
+        renderContent={renderInner}
+        renderHeader={renderHeader}
         initialSnap={1}
-        callbackNode={this.fall}
+        callbackNode={fall}
         enabledGestureInteraction={true}
       />
       <Animated.View
         style={{
           margin: 20,
-          opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
+          opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)),
         }}
       >
         <View style={{ alignItems: "center" }}>
-          <TouchableOpacity onPress={() => this.bs.current.snapTo(0)}>
+          <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
             <View
               style={{
                 height: 100,

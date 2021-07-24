@@ -37,7 +37,8 @@ export const signUpUser = async ({ name, email, password }) => {
             user_phone: "",
             user_location: "",
             doc_id: cred.uid,
-            posts: { title: "", description: "", photo: "" },
+            user_image: ""
+            // posts: { title: "", description: "", photo: "" },
           });
       });
     //console.log("user:", user)
@@ -144,9 +145,14 @@ export const uploadImageToCloud = async (uri, type, path) => {
     const response = await fetch(uri);
     const blob = await response.blob();
 
-    fileRef.put(blob).then(() => {
-      console.log("UPLOADED");
-    });
+    await fileRef.put(blob)
+        console.log("UPLOADED");
+    
+    
+    const url = await firebase.storage().ref(path_to_img).getDownloadURL()
+    console.log("URL: ", url);
+
+
 
     // const reference = await storage().ref(path_to_img).putFile(uri);
 
@@ -167,11 +173,27 @@ export const uploadImageToCloud = async (uri, type, path) => {
 
     // const url = await storage().ref(path_to_img).getDownloadURL();
 
-    console.log("URL: ", url);
-
     return { success: true, path: path_to_img, url };
   } catch (error) {
     console.error(error);
     return { success: false };
+  }
+}
+
+export const getPosts = async () => {
+  try {
+    const querySnapshot = await firebase.firestore().collection("posts").get();
+    if (querySnapshot && querySnapshot.size > 0) {
+      return {
+        data: querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })),
+      };
+    }
+    return data;
+  } catch (error) {
+    console.error(error);
+    return {error };
   }
 };
