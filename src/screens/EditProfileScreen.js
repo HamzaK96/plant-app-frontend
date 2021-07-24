@@ -46,7 +46,7 @@ export default function EditProfileScreen() {
           user_name: user_name_current,
           user_phone: user_phone_current,
           user_location: user_location_current,
-          user_image: user_img_url
+          user_image: user_img_url,
         })
         .then(() => {
           console.log("Document successfully updated!");

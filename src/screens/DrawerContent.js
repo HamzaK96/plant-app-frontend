@@ -82,7 +82,7 @@ export function DrawerContent(props) {
               <MaterialIcons name="favorite" color={color} size={size} />
             )}
             label="Favourites"
-            onPress={() => {}}
+            onPress={() => {props.navigation.navigate("FavDrawer")}}
           />
           <DrawerItem
             icon={({ color, size }) => (
