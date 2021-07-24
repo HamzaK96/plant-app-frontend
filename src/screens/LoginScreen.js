@@ -10,7 +10,7 @@ import BackButton from "../components/BackButton";
 import { theme } from "../core/theme";
 import { emailValidator } from "../helpers/emailValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
-import { loginUser, saveData } from "../api/auth-api";
+import { loginUser, saveUserData } from "../api/auth-api";
 import Toast from "../components/Toast";
 import { AuthContext } from "../api/auth-api";
 import { AuthProvider } from "../api/auth-api";
@@ -46,7 +46,7 @@ export default function LoginScreen({ navigation }) {
     // console.log("RESPONSE: ", response.user.uid)
 
 
-    await saveData(response.user.uid)
+    await saveUserData(response.user.uid)
 
 
     // console.log("response: ", response);

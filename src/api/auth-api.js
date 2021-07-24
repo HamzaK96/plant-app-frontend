@@ -25,21 +25,17 @@ export const signUpUser = async ({ name, email, password }) => {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((cred) => {
-        return firebase
-          .firestore()
-          .collection("users")
-          .doc(cred.uid)
-          .set({
-            user_name: name,
-            user_email: email,
-            user_password: password,
-            user_bio: "",
-            user_phone: "",
-            user_location: "",
-            doc_id: cred.uid,
-            user_image: ""
-            // posts: { title: "", description: "", photo: "" },
-          });
+        return firebase.firestore().collection("users").doc(cred.uid).set({
+          user_name: name,
+          user_email: email,
+          user_password: password,
+          user_bio: "",
+          user_phone: "",
+          user_location: "",
+          doc_id: cred.uid,
+          user_image: "",
+          // posts: { title: "", description: "", photo: "" },
+        });
       });
     //console.log("user:", user)
     // console.log("user", user);
@@ -88,10 +84,21 @@ export const sendEmailWithPassword = async (email) => {
   }
 };
 
-export const saveData = async (uid) => {
+export const saveUserData = async (uid) => {
   //   console.log("saving data...");
   try {
     await AsyncStorage.setItem("USER_STORAGE", uid);
+    // console.log("UID: ", uid);
+    alert("Data successfully saved");
+  } catch (e) {
+    alert("Failed to save the data to the storage");
+  }
+};
+
+export const savePostData = async (pid) => {
+  //   console.log("saving data...");
+  try {
+    await AsyncStorage.setItem("POST_STORAGE", pid);
     // console.log("UID: ", uid);
     alert("Data successfully saved");
   } catch (e) {
@@ -113,7 +120,8 @@ export const readData = async () => {
 
 export const clearStorage = async () => {
   try {
-    await AsyncStorage.removeItem("USER_STORAGE");
+    // await AsyncStorage.removeItem("USER_STORAGE");
+    await AsyncStorage.clear();
     alert("Storage successfully cleared!");
   } catch (e) {
     alert("Failed to clear the async storage.");
@@ -145,14 +153,11 @@ export const uploadImageToCloud = async (uri, type, path) => {
     const response = await fetch(uri);
     const blob = await response.blob();
 
-    await fileRef.put(blob)
-        console.log("UPLOADED");
-    
-    
-    const url = await firebase.storage().ref(path_to_img).getDownloadURL()
+    await fileRef.put(blob);
+    console.log("UPLOADED");
+
+    const url = await firebase.storage().ref(path_to_img).getDownloadURL();
     console.log("URL: ", url);
-
-
 
     // const reference = await storage().ref(path_to_img).putFile(uri);
 
@@ -178,7 +183,7 @@ export const uploadImageToCloud = async (uri, type, path) => {
     console.error(error);
     return { success: false };
   }
-}
+};
 
 export const getPosts = async () => {
   try {
@@ -194,6 +199,21 @@ export const getPosts = async () => {
     return data;
   } catch (error) {
     console.error(error);
-    return {error };
+    return { error };
   }
 };
+
+// export const getMultiplePosts = async (id) => {
+//   db.collection("posts")
+//     .where("capital", "==", true)
+//     .get()
+//     .then((querySnapshot) => {
+//       querySnapshot.forEach((doc) => {
+//         // doc.data() is never undefined for query doc snapshots
+//         console.log(doc.id, " => ", doc.data());
+//       });
+//     })
+//     .catch((error) => {
+//       console.log("Error getting documents: ", error);
+//     });
+// };

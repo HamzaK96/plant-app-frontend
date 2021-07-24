@@ -15,8 +15,12 @@ import {
 
 import { theme } from "../core/theme";
 import { commentValidator } from "../helpers/commentValidator";
-export default function AddCommentScreen() {
+export default function AddCommentScreen({ route, navigation }) {
   const [comment, setComment] = useState({ value: "", error: "" });
+
+  const {id} = route.params;
+
+//   alert(id);
 
   const addComment = async () => {
     const commentError = commentValidator(comment.value);
@@ -46,6 +50,7 @@ export default function AddCommentScreen() {
                 .firestore()
                 .collection("comments")
                 .add({
+                  post_id: id,
                   user_id: user_id,
                   user_name: doc.data()["user_name"],
                   user_email: doc.data()["user_email"],
