@@ -19,6 +19,7 @@ import EditProfileScreen from "./EditProfileScreen";
 import FeedScreen from "./FeedScreen";
 import CreatePostScreen from "./CreatePostScreen";
 import AddCommentScreen from "./AddCommentScreen";
+import FavScreen from "./FavScreen";
 // import {
 // //   LoginScreen,
 // //   Pred,
@@ -43,7 +44,7 @@ import Pred from "./Pred";
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const FeedStack = createStackNavigator();
-const FavouritesStack = createStackNavigator();
+const FavStack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
@@ -187,6 +188,29 @@ const ProfileStackScreen = ({ navigation }) => (
   </ProfileStack.Navigator>
 );
 
+const FavStackScreen = ({ navigation }) => (
+  <FavStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#242424",
+      },
+      headerTitleStyle: {
+        textAlign: "center",
+        alignSelf: "center", //if style using flexbox
+      },
+    }}
+  >
+    <FavStack.Screen
+      name="FavScreen"
+      component={FavScreen}
+      options={{
+        title: "Favourites",
+        headerLeft: () => <LeftButton navigation={navigation} />
+      }}
+    />
+  </FavStack.Navigator>
+);
+
 export default function DrawerRoutes({ route, navigation }) {
   // alert(route.params.user_id)
   return (
@@ -194,7 +218,7 @@ export default function DrawerRoutes({ route, navigation }) {
       <Drawer.Screen name="HomeDrawer" component={HomeStackScreen} />
       <Drawer.Screen name="ProfileDrawer" component={ProfileStackScreen} />
       <Drawer.Screen name="FeedDrawer" component={FeedStackScreen} />
-      {/* <Drawer.Screen name="FavouritesDrawer" component={FavouritesStackScreen} /> */}
+      <Drawer.Screen name="FavDrawer" component={FavStackScreen} />
     </Drawer.Navigator>
   );
 }
