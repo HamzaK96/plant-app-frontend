@@ -25,7 +25,7 @@ const PostCard = ({ item, navigation }) => {
   likeIcon = item.liked ? "favorite" : "favorite-border";
   likeIconColor = item.liked ? "#2e64e5" : "#333";
 
-    console.log("Navigtaion", navigation);
+    // console.log("Navigtaion", navigation);
 
 //   console.log("ITEM: ", JSON.stringify(item));
 

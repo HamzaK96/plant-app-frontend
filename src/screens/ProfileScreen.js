@@ -1,5 +1,6 @@
-import React from "react";
-import { View, SafeAreaView, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, SafeAreaView, StyleSheet} from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import {
   Avatar,
   Title,
@@ -8,11 +9,54 @@ import {
   TouchableRipple,
 } from "react-native-paper";
 
+import firebase from "firebase/app";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default function ProfileScreen() {
+  const [user_img, setUserImg] = useState("");
+  const [user_name, setUserName] = useState("Your Name");
+  const [user_phone, setUserPhone] = useState("Your Phone Number i.e +1234567");
+  const [user_location, setUserLocation] = useState(
+    "Your Location i.e Lahore, Pakistan"
+  );
+  const [user_email, setUserEmail] = useState("");
+  const [loading, setLoading] = useState(true);
+  const isFocused = useIsFocused();
+
+  //   alert(user_img);
+
+  useEffect(() => {
+    const updateUserProfile = async () => {
+      await AsyncStorage.getItem("USER_STORAGE").then((user_id) => {
+        var docRef = firebase.firestore().collection("users").doc(user_id);
+
+        // console.log("ENTERS USEEFFECT");
+        // console.log("user_name useffect: ", user_name);
+
+        docRef.get().then((doc) => {
+          if (doc.exists) {
+            setUserName(doc.data()["user_name"]);
+            setUserEmail(doc.data()["user_email"]);
+            setUserPhone(doc.data()["user_phone"]);
+            setUserLocation(doc.data()["user_location"]);
+            setUserImg(doc.data()["user_image"]);
+          }
+        });
+      });
+
+      //   console.log("LOADING: ", loading);
+      setLoading(false);
+      //   console.log("LOADING: ", loading);
+    };
+
+    if (isFocused) {
+      updateUserProfile();
+    }
+  }, [isFocused]);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
@@ -23,10 +67,18 @@ export default function ProfileScreen() {
             marginTop: 15,
           }}
         >
-          <Avatar.Image
-            source={require("../assets/images/default-user.png")}
-            size={100}
-          />
+          {user_img != "" ? (
+            <Avatar.Image
+              // source={require("../assets/images/default-user.png")}
+              source={{ uri: user_img }}
+              size={100}
+            />
+          ) : (
+            <Avatar.Image
+              source={require("../assets/images/default-user.png")}
+              size={100}
+            />
+          )}
           <View style={{ marginLeft: 20 }}>
             <Title
               style={[
@@ -36,7 +88,8 @@ export default function ProfileScreen() {
                 },
               ]}
             >
-              Hamza Khawaja
+              {/* Hamza Khawaja */}
+              {user_name}
             </Title>
           </View>
         </View>
@@ -46,39 +99,16 @@ export default function ProfileScreen() {
         <View style={styles.row}>
           <MaterialIcons name="location-on" size={24} color="white" />
           <Text style={{ color: "#777777", marginLeft: 20 }}>
-            Lahore, Pakistan
+            {user_location}
           </Text>
         </View>
         <View style={styles.row}>
           <MaterialIcons name="phone" size={24} color="white" />
-          <Text style={{ color: "#777777", marginLeft: 20 }}>
-            +92 333 4522434
-          </Text>
+          <Text style={{ color: "#777777", marginLeft: 20 }}>{user_phone}</Text>
         </View>
         <View style={styles.row}>
           <MaterialIcons name="email" size={24} color="white" />
-          <Text style={{ color: "#777777", marginLeft: 20 }}>
-            khawajahamza08@gmail.com
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.infoBoxWrapper}>
-        <View
-          style={[
-            styles.infoBox,
-            {
-              borderRightColor: "#dddddd",
-              borderRightWidth: 1,
-            },
-          ]}
-        >
-          <Title>100</Title>
-          <Caption>Posts</Caption>
-        </View>
-        <View style={styles.infoBox}>
-          <Title>12</Title>
-          <Caption>Points</Caption>
+          <Text style={{ color: "#777777", marginLeft: 20 }}>{user_email}</Text>
         </View>
       </View>
     </SafeAreaView>

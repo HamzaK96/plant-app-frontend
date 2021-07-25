@@ -1,5 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import { View, StyleSheet } from "react-native";
+import firebase from "firebase/app";
 import {
   useTheme,
   Avatar,
@@ -21,7 +23,40 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-community/async-storage";
 
 export function DrawerContent(props) {
+  const [user_name, setUserName] = useState("");
+  const [user_email, setUserEmail] = useState("");
+  const [user_image, setUserImage] = useState("");
+
+  const isFocused = useIsFocused();
   //   const { logoutUser } = useContext(AuthContext);
+  useEffect(() => {
+    const updateUserProfile = async () => {
+      await AsyncStorage.getItem("USER_STORAGE").then((user_id) => {
+        var docRef = firebase.firestore().collection("users").doc(user_id);
+
+        // console.log("ENTERS USEEFFECT");
+        // console.log("user_name useffect: ", user_name);
+
+        docRef.get().then((doc) => {
+          if (doc.exists) {
+            setUserName(doc.data()["user_name"]);
+            setUserEmail(doc.data()["user_email"]);
+            setUserImage(doc.data()["user_image"]);
+            // console.log(doc.data()["user_name"]);
+          }
+        });
+      });
+
+      //   console.log("LOADING: ", loading);
+      setLoading(false);
+      //   console.log("LOADING: ", loading);
+    };
+
+    if (isFocused) {
+      updateUserProfile();
+      //   console.log("USER_NAME: ", user_name)
+    }
+  }, [isFocused]);
 
   const onLogoutPressed = async () => {
     const response = await logoutUser();
@@ -35,15 +70,21 @@ export function DrawerContent(props) {
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
             <View style={{ flexDirection: "row", marginTop: 15 }}>
-              <Avatar.Image
-                source={require("../assets/images/default-user.png")}
-                size={50}
-              />
+              {user_image != "" ? (
+                <Avatar.Image
+                  // source={require("../assets/images/default-user.png")}
+                  source={{ uri: user_image }}
+                  size={50}
+                />
+              ) : (
+                <Avatar.Image
+                  source={require("../assets/images/default-user.png")}
+                  size={50}
+                />
+              )}
               <View style={{ marginLeft: 15, flexDirection: "column" }}>
-                <Title style={styles.title}>Hamza Khawaja</Title>
-                <Caption style={styles.caption}>
-                  khawajahamza08@gmail.com
-                </Caption>
+                <Title style={styles.title}>{user_name}</Title>
+                <Caption style={styles.caption}>{user_email}</Caption>
               </View>
             </View>
           </View>
@@ -82,7 +123,9 @@ export function DrawerContent(props) {
               <MaterialIcons name="favorite" color={color} size={size} />
             )}
             label="Favourites"
-            onPress={() => {props.navigation.navigate("FavDrawer")}}
+            onPress={() => {
+              props.navigation.navigate("FavDrawer");
+            }}
           />
           <DrawerItem
             icon={({ color, size }) => (

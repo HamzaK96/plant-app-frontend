@@ -35,6 +35,7 @@ import FavScreen from "./FavScreen";
 
 import { DrawerContent } from "./DrawerContent";
 import Pred from "./Pred";
+import AsyncStorage from "@react-native-community/async-storage";
 
 // const Stack = createStackNavigator();
 // if (!firebase.apps.length) {
@@ -205,7 +206,7 @@ const FavStackScreen = ({ navigation }) => (
       component={FavScreen}
       options={{
         title: "Favourites",
-        headerLeft: () => <LeftButton navigation={navigation} />
+        headerLeft: () => <LeftButton navigation={navigation} />,
       }}
     />
   </FavStack.Navigator>
@@ -213,8 +214,11 @@ const FavStackScreen = ({ navigation }) => (
 
 export default function DrawerRoutes({ route, navigation }) {
   // alert(route.params.user_id)
+
   return (
-    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
+    <Drawer.Navigator
+      drawerContent={(props) => <DrawerContent {...props} />}
+    >
       <Drawer.Screen name="HomeDrawer" component={HomeStackScreen} />
       <Drawer.Screen name="ProfileDrawer" component={ProfileStackScreen} />
       <Drawer.Screen name="FeedDrawer" component={FeedStackScreen} />
