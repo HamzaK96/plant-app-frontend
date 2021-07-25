@@ -26,18 +26,21 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { USER_STORAGE } from "../helpers/globalvariables";
 import storage from "@react-native-firebase/storage";
 import { uploadImageToCloud } from "../api/auth-api";
+import { nameValidator } from "../helpers/nameValidator";
 
-export default function EditProfileScreen() {
+export default function EditProfileScreen({navigation}) {
   const exampleImageUri = Image.resolveAssetSource(exampleImageUser).uri;
   // The path of the picked image
   const [pickedImagePath, setPickedImagePath] = useState(exampleImageUri);
   const [user_name_current, setUserName] = useState("");
-  const [user_phone_current, setUserPhone] = useState("");
-  const [user_location_current, setUserLocation] = useState("");
+  const [user_phone_current, setUserPhone] = useState("Your Phone Number i.e 1234567");
+  const [user_location_current, setUserLocation] = useState("Your Location i.e Lahore, Punjab, Pakistan");
 
   const [user_img_url, setURL] = useState("");
 
   const addToUserDatabase = async () => {
+
+
     AsyncStorage.getItem("USER_STORAGE").then((user_id) => {
       //alert(user_id);
       var user_ref = firebase.firestore().collection("users").doc(user_id);
@@ -49,7 +52,8 @@ export default function EditProfileScreen() {
           user_image: user_img_url,
         })
         .then(() => {
-          console.log("Document successfully updated!");
+        //   console.log("Document successfully updated!");
+        navigation.navigate("ProfileScreen");
         })
         .catch((error) => {
           // The document probably doesn't exist.
@@ -90,7 +94,7 @@ export default function EditProfileScreen() {
 
       console.log("URL: ", url);
 
-    //   console.log(result.uri);
+      //   console.log(result.uri);
     }
   };
 
@@ -243,7 +247,9 @@ export default function EditProfileScreen() {
           <TextInput
             placeholder="Location"
             placeholderTextColor="#666666"
-            onChangeText={(location) => setUserLocation(location)}
+            onChangeText={(location) =>
+              setUserLocation(location)
+            }
             autoCorrect={false}
             style={styles.textInput}
           />
